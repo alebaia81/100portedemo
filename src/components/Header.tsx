@@ -1,5 +1,24 @@
 import Link from "next/link";
-import { Phone, Instagram } from "lucide-react";
+import { Phone } from "lucide-react";
+
+const InstagramIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    className={className}
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+  </svg>
+);
 
 export default function Header() {
   return (
@@ -15,9 +34,9 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-muted-text">
-          <Link href="#menu" className="hover:text-accent transition-colors">Il Menù</Link>
-          <Link href="#asporto" className="hover:text-accent transition-colors">Asporto</Link>
-          <Link href="#contatti" className="hover:text-accent transition-colors">Dove Siamo</Link>
+          <Link href="/menu" className="hover:text-accent transition-colors">Il Menù</Link>
+          <Link href="/#contatti" className="hover:text-accent transition-colors">Dove Siamo</Link>
+          <Link href="/menu" className="bg-accent text-background px-5 py-2 rounded-lg hover:bg-accent/90 transition-colors font-bold tracking-wider">Ordina Ora</Link>
         </nav>
 
         <div className="flex items-center gap-4">
@@ -32,7 +51,7 @@ export default function Header() {
             target="_blank"
             className="p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-transform"
           >
-            <Instagram size={18} />
+            <InstagramIcon size={18} />
           </a>
         </div>
       </div>

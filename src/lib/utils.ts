@@ -17,19 +17,39 @@ export function generateWhatsAppLink(
   items: { name: string; quantity: number; price: number }[],
   total: number,
   customerName: string,
-  pickupTime: string
+  pickupTime: string,
+  orderType: 'ritiro' | 'domicilio' = 'ritiro',
+  address: string = '',
+  paymentMethod: 'contanti' | 'pos' = 'contanti',
+  cashAmount: string = ''
 ) {
   const baseUrl = "https://wa.me/" + phone.replace(/\D/g, "");
   
-  let message = `Ciao Cento Porte Pub! Mi chiamo *${customerName}*, vorrei ordinare per asporto:\n\n`;
+  const listaPiatti = items.map(item => `${item.quantity}x ${item.name}`).join("\n- ");
   
-  items.forEach((item) => {
-    message += `• ${item.quantity}x *${item.name}* (${formatPrice(item.price * item.quantity)})\n`;
-  });
+  let message = `🍔 *NUOVO ORDINE - 100 PORTE*\n\n`;
+  message += `👤 *Nome:* ${customerName}\n`;
+  message += `📦 *Modalità:* ${orderType === 'domicilio' ? 'Consegna a Domicilio' : 'Ritiro al Locale'}\n`;
   
-  message += `\n*Totale: ${formatPrice(total)}*\n`;
-  message += `*Orario di ritiro preferito: ${pickupTime}*\n\n`;
-  message += `Confermate la disponibilità?`;
+  if (orderType === 'domicilio') {
+    message += `📍 *Indirizzo:* ${address}\n`;
+    message += `🕒 *Orario di consegna:* ${pickupTime}\n`;
+  } else {
+    message += `🕒 *Orario di ritiro:* ${pickupTime}\n`;
+  }
+  
+  if (orderType === 'domicilio') {
+    if (paymentMethod === 'contanti' && cashAmount.trim() !== '') {
+      message += `💳 *Pagamento:* Contanti (Resto su ${cashAmount}€)\n\n`;
+    } else {
+      message += `💳 *Pagamento:* ${paymentMethod === 'pos' ? 'Carta / POS' : 'Contanti'}\n\n`;
+    }
+  } else {
+    message += `💳 *Pagamento:* Al Ritiro nel Locale\n\n`;
+  }
+  
+  message += `*Riepilogo:*\n- ${listaPiatti}\n\n`;
+  message += `💰 *TOTALE: ${formatPrice(total)}*`;
   
   return `${baseUrl}?text=${encodeURIComponent(message)}`;
 }

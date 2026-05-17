@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Product } from "@/lib/menu-data";
 import { useCart } from "@/lib/store";
 import { formatPrice } from "@/lib/utils";
@@ -7,21 +8,30 @@ import { Plus, Minus } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
+  isAvailable?: boolean;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, isAvailable = true }: ProductCardProps) {
   const { addItem, items, updateQuantity } = useCart();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const cartItem = items.find((item) => item.id === product.id);
-  const quantity = cartItem?.quantity || 0;
+  const quantity = mounted ? (cartItem?.quantity || 0) : 0;
 
   return (
-    <div className="glass-card p-4 flex flex-col h-full group transition-all hover:border-accent/50">
+    <div className={`glass-card p-4 flex flex-col h-full group transition-all hover:border-accent/50 ${!isAvailable ? 'opacity-50 grayscale' : ''}`}>
       <div className="flex-1">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-xl font-bold text-foreground group-hover:text-accent transition-colors">
             {product.name}
           </h3>
-          <span className="text-accent font-bold">{formatPrice(product.price)}</span>
+          <span className="text-accent font-bold">
+            {isAvailable ? formatPrice(product.price) : <span className="text-red-500 font-bold uppercase text-sm">Esaurito</span>}
+          </span>
         </div>
         <p className="text-muted-text text-sm mb-4 leading-relaxed">
           {product.description}
@@ -29,7 +39,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <div className="mt-auto flex items-center justify-between">
-        {quantity > 0 ? (
+        {quantity > 0 && isAvailable ? (
           <div className="flex items-center gap-3 bg-background/50 rounded-lg p-1 border border-border">
             <button
               onClick={() => updateQuantity(product.id, quantity - 1)}
@@ -47,8 +57,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         ) : (
           <button
-            onClick={() => addItem(product)}
-            className="btn-primary py-2 px-4 flex items-center gap-2 w-full justify-center text-sm"
+            onClick={() => isAvailable && addItem(product)}
+            disabled={!isAvailable}
+            className="btn-primary py-2 px-4 flex items-center gap-2 w-full justify-center text-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Plus size={16} />
             Aggiungi
