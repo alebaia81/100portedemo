@@ -49,7 +49,7 @@ export default function CartDrawer() {
     }
     
     const link = generateWhatsAppLink(
-      "3398156719", 
+      process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "3398156719", 
       items, 
       total, 
       customerName, 

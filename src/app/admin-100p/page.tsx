@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { verifyPin, toggleProductAvailability, toggleCategoryAvailability, updateProductPrice } from "./actions";
 import { supabase } from "@/lib/supabase";
-import menuJson from "@/lib/menu.json";
+import { MENU_DATA } from "@/lib/menu-data";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -15,10 +15,10 @@ export default function AdminPage() {
   const [loadingCategory, setLoadingCategory] = useState<string | null>(null);
 
   // Raggruppiamo i prodotti per categoria
-  const categories = Array.from(new Set(menuJson.map(item => item.category)));
+  const categories = Array.from(new Set(MENU_DATA.map(item => item.category)));
   const groupedProducts = categories.map(category => ({
     category,
-    items: menuJson.filter(item => item.category === category)
+    items: MENU_DATA.filter(item => item.category === category)
   }));
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function AdminPage() {
 
   // Toggle intera categoria
   const toggleCategory = async (category: string) => {
-    const categoryItems = menuJson.filter(item => item.category === category);
+    const categoryItems = MENU_DATA.filter(item => item.category === category);
     const ids = categoryItems.map(item => item.id);
     
     // Controlla se almeno un prodotto della categoria è attivo
@@ -121,7 +121,7 @@ export default function AdminPage() {
 
   // Controlla se tutta la categoria è attiva
   const isCategoryActive = (category: string) => {
-    const items = menuJson.filter(item => item.category === category);
+    const items = MENU_DATA.filter(item => item.category === category);
     return items.every(item => availability[item.id] !== false);
   };
 
