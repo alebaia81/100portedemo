@@ -39,7 +39,14 @@ export default function Header() {
           <Link href="/menu" className="bg-accent text-background px-5 py-2 rounded-lg hover:bg-accent/90 transition-colors font-bold tracking-wider">Ordina Ora</Link>
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
+          {/* Ordina Ora visibile solo su mobile */}
+          <Link 
+            href="/menu" 
+            className="md:hidden bg-accent text-background px-4 py-2 rounded-lg text-sm font-bold tracking-wider hover:bg-accent/90 transition-colors"
+          >
+            Ordina Ora
+          </Link>
           <a 
             href="tel:+393398156719" 
             className="p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-transform"
@@ -49,7 +56,7 @@ export default function Header() {
           <a 
             href="https://www.instagram.com/centoportepub" 
             target="_blank"
-            className="p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-transform"
+            className="hidden sm:block p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-transform"
           >
             <InstagramIcon size={18} />
           </a>

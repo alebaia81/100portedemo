@@ -8,6 +8,7 @@ import { MENU_DATA } from "@/lib/menu-data";
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState("");
+  const [showPin, setShowPin] = useState(false);
   const [error, setError] = useState("");
   const [availability, setAvailability] = useState<Record<string, boolean>>({});
   const [prices, setPrices] = useState<Record<string, number | null>>({});
@@ -131,13 +132,27 @@ export default function AdminPage() {
         <form onSubmit={handleLogin} className="glass-card p-8 space-y-6 w-full max-w-sm">
           <h1 className="text-2xl font-serif text-accent text-center">Area Riservata</h1>
           {error && <p className="text-red-500 text-center text-sm">{error}</p>}
-          <input 
-            type="password" 
-            placeholder="Inserisci PIN"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-            className="w-full bg-surface border border-border rounded-lg p-3 text-center text-xl tracking-widest focus:border-accent outline-none"
-          />
+          <div className="relative">
+            <input 
+              type={showPin ? "text" : "password"}
+              placeholder="Inserisci PIN"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              className="w-full bg-surface border border-border rounded-lg p-3 text-center text-xl tracking-widest focus:border-accent outline-none pr-12"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPin(!showPin)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-text hover:text-accent transition-colors p-1"
+              aria-label={showPin ? "Nascondi PIN" : "Mostra PIN"}
+            >
+              {showPin ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              )}
+            </button>
+          </div>
           <button type="submit" className="btn-primary w-full py-3">Accedi</button>
         </form>
       </div>

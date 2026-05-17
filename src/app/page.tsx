@@ -312,12 +312,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Cart Drawer */}
-      <CartDrawer />
+      {/* Sticky Bottom CTA - solo mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-background/95 backdrop-blur border-t border-border p-4 flex gap-3">
+        <a 
+          href="tel:+393398156719"
+          className="flex-1 flex items-center justify-center gap-2 py-3 border border-border rounded-lg font-bold text-sm hover:border-accent transition-colors"
+        >
+          <Phone size={16} /> Chiama
+        </a>
+        <Link 
+          href="/menu"
+          className="flex-2 flex-grow flex items-center justify-center gap-2 py-3 bg-accent text-background rounded-lg font-bold text-sm hover:bg-accent/90 transition-colors"
+        >
+          <ShoppingBag size={16} /> Ordina Ora
+        </Link>
+      </div>
 
-      <footer className="py-12 border-t border-border text-center text-xs text-muted-text uppercase tracking-widest">
-        &copy; {new Date().getFullYear()} Cento Porte Pub & Hamburgeria. All rights reserved.
-      </footer>
+      {/* Spacer per sticky bar mobile */}
+      <div className="md:hidden h-20" />
     </main>
   );
 }
