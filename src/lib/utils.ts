@@ -27,29 +27,29 @@ export function generateWhatsAppLink(
   
   const listaPiatti = items.map(item => `${item.quantity}x ${item.name}`).join("\n- ");
   
-  let message = `🍔 *NUOVO ORDINE - 100 PORTE*\n\n`;
-  message += `👤 *Nome:* ${customerName}\n`;
-  message += `📦 *Modalità:* ${orderType === 'domicilio' ? 'Consegna a Domicilio' : 'Ritiro al Locale'}\n`;
+  let message = `\u{1F354} *NUOVO ORDINE - 100 PORTE*\n\n`;
+  message += `\u{1F464} *Nome:* ${customerName}\n`;
+  message += `\u{1F4E6} *Modalita:* ${orderType === 'domicilio' ? 'Consegna a Domicilio' : 'Ritiro al Locale'}\n`;
   
   if (orderType === 'domicilio') {
-    message += `📍 *Indirizzo:* ${address}\n`;
-    message += `🕒 *Orario di consegna:* ${pickupTime}\n`;
+    message += `\u{1F4CD} *Indirizzo:* ${address}\n`;
+    message += `\u{1F552} *Orario consegna:* ${pickupTime}\n`;
   } else {
-    message += `🕒 *Orario di ritiro:* ${pickupTime}\n`;
+    message += `\u{1F552} *Orario ritiro:* ${pickupTime}\n`;
   }
   
   if (orderType === 'domicilio') {
     if (paymentMethod === 'contanti' && cashAmount.trim() !== '') {
-      message += `💳 *Pagamento:* Contanti (Resto su ${cashAmount}€)\n\n`;
+      message += `\u{1F4B5} *Pagamento:* Contanti (Resto su ${cashAmount}\u20AC)\n\n`;
     } else {
-      message += `💳 *Pagamento:* ${paymentMethod === 'pos' ? 'Carta / POS' : 'Contanti'}\n\n`;
+      message += `\u{1F4B3} *Pagamento:* ${paymentMethod === 'pos' ? 'Carta / POS' : 'Contanti'}\n\n`;
     }
   } else {
-    message += `💳 *Pagamento:* Al Ritiro nel Locale\n\n`;
+    message += `\u{1F4B5} *Pagamento:* Al Ritiro nel Locale\n\n`;
   }
   
-  message += `*Riepilogo:*\n- ${listaPiatti}\n\n`;
-  message += `💰 *TOTALE: ${formatPrice(total)}*`;
+  message += `\u{1F4CB} *Riepilogo:*\n- ${listaPiatti}\n\n`;
+  message += `\u{1F4B0} *TOTALE: ${formatPrice(total)}*`;
   
   return `${baseUrl}?text=${encodeURIComponent(message)}`;
 }

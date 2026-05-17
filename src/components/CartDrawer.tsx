@@ -21,7 +21,8 @@ export default function CartDrawer() {
     pickupTime, 
     setPickupTime,
     removeItem,
-    updateQuantity
+    updateQuantity,
+    clearCart
   } = useCart();
 
   const total = getTotal();
@@ -59,6 +60,14 @@ export default function CartDrawer() {
       cashAmount
     );
     window.open(link, "_blank");
+    
+    // Reset dopo invio per evitare ordini doppi
+    clearCart();
+    setAddress('');
+    setCashAmount('');
+    setGdprAccepted(false);
+    setOrderType('ritiro');
+    setIsOpen(false);
   };
 
   if (!mounted || itemCount === 0) return null;
