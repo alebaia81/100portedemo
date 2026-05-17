@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Phone } from "lucide-react";
 
 const InstagramIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
@@ -24,13 +25,15 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-6 h-20 flex justify-between items-center">
-        <Link href="/" className="flex flex-col">
-          <span className="text-2xl font-serif font-bold tracking-tighter text-accent">
-            100 PORTE
-          </span>
-          <span className="text-[10px] uppercase tracking-[0.3em] -mt-1 text-muted-text">
-            Hamburgeria Pub
-          </span>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/images/logo.png"
+            alt="100 Porte Pub"
+            width={200}
+            height={60}
+            className="h-11 md:h-14 w-auto object-contain mix-blend-screen invert hue-rotate-180 drop-shadow-[0_0_8px_rgba(200,135,58,0.6)]"
+            priority
+          />
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-muted-text">
@@ -54,7 +57,7 @@ export default function Header() {
             <Phone size={18} />
           </a>
           <a 
-            href="https://www.instagram.com/centoportepub" 
+            href="https://www.instagram.com/centoporte_pub/" 
             target="_blank"
             className="hidden sm:block p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-transform"
           >

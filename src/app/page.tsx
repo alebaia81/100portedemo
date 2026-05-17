@@ -15,9 +15,6 @@ export default function Home() {
         </div>
         
         <div className="relative z-10 container mx-auto px-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-accent/20 border border-accent/30 px-4 py-1 rounded-full text-accent text-xs font-bold uppercase tracking-widest mb-6 animate-fade-in">
-            <Zap size={14} /> Novità del Mese
-          </div>
           <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6 tracking-tighter">
             L&apos;Hamburgeria di <br />
             <span className="text-accent italic font-serif">Castelvetro</span>
@@ -178,7 +175,7 @@ export default function Home() {
               </h2>
             </div>
             <a 
-              href="https://www.instagram.com/centoportepub" 
+              href="https://www.instagram.com/centoporte_pub/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-accent hover:text-accent/80 transition-colors border-b border-accent pb-1"
