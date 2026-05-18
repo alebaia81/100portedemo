@@ -289,7 +289,7 @@ export default function Home() {
             {/* Right Column: Map */}
             <div className="lg:col-span-7 h-[500px] lg:h-[600px] w-full relative rounded-2xl overflow-hidden border border-border glass-card group">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2830.4908906512683!2d9.9866418!3d45.1017409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4781cae9365287e5%3A0x6b0931215b24479e!2sCento%20Porte%20Hamburgeria!5e0!3m2!1sit!2sit!4v1716060000000!5m2!1sit!2sit" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2830.4908906512683!2d9.9895777!3d45.0963202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4780fd6b7e49afcb%3A0x6ac342f1f317b60e!2s100+porte+hamburgeria!5e0!3m2!1sit!2sit!4v1716060000000!5m2!1sit!2sit" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) contrast(100%)' }} 
@@ -300,10 +300,15 @@ export default function Home() {
               ></iframe>
               
               {/* Floating Info Box on Map (similar to screenshot) */}
-              <div className="absolute bottom-6 left-6 right-6 md:right-auto bg-surface/95 backdrop-blur-md p-4 rounded-xl border border-border shadow-2xl transition-transform transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+              <a 
+                href="https://maps.app.goo.gl/LsbVCHs3r5K6kVUp8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-6 left-6 right-6 md:right-auto bg-surface/95 backdrop-blur-md p-4 rounded-xl border border-border shadow-2xl transition-transform transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 hover:border-accent/40 block transition-all duration-300"
+              >
                 <p className="font-serif text-accent font-bold text-lg">100 Porte Hamburgeria</p>
                 <p className="text-xs text-muted-text uppercase tracking-widest mt-1">Clicca per aprire in Maps</p>
-              </div>
+              </a>
             </div>
 
           </div>
