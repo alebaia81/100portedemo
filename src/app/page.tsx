@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
+import Footer from "@/components/Footer";
 import { Clock, MapPin, Beer, Utensils, Zap, Phone, Tv, Flame, Users, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
@@ -308,6 +309,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <Footer />
 
       {/* Sticky Bottom CTA - solo mobile */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-background/95 backdrop-blur border-t border-border p-4 flex gap-3">

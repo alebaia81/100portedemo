@@ -3,6 +3,7 @@
 import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import CartDrawer from "@/components/CartDrawer";
+import Footer from "@/components/Footer";
 import { MENU_DATA } from "@/lib/menu-data";
 import { useMenuAvailability } from "@/hooks/useMenuAvailability";
 
@@ -64,9 +65,8 @@ export default function MenuPage() {
       {/* Cart Drawer */}
       <CartDrawer />
 
-      <footer className="py-12 border-t border-border text-center text-xs text-muted-text uppercase tracking-widest">
-        &copy; {new Date().getFullYear()} Cento Porte Pub &amp; Hamburgeria. All rights reserved.
-      </footer>
+      {/* Footer */}
+      <Footer />
     </main>
   );
 }
