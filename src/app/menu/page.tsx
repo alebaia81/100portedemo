@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
 import CartDrawer from "@/components/CartDrawer";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/ScrollToTop";
 import { MENU_DATA } from "@/lib/menu-data";
 import { useMenuAvailability } from "@/hooks/useMenuAvailability";
 
@@ -67,6 +68,9 @@ export default function MenuPage() {
 
       {/* Footer */}
       <Footer />
+
+      {/* Scroll to Top */}
+      <ScrollToTop bottomOffset="bottom-24 md:bottom-6" />
     </main>
   );
 }

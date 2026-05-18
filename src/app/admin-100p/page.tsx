@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { verifyPin, toggleProductAvailability, toggleCategoryAvailability, updateProductPrice } from "./actions";
 import { supabase } from "@/lib/supabase";
 import { MENU_DATA } from "@/lib/menu-data";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -277,6 +278,7 @@ export default function AdminPage() {
           );
         })}
       </div>
+      <ScrollToTop bottomOffset="bottom-6" />
     </div>
   );
 }
