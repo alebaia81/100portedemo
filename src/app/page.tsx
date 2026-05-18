@@ -233,7 +233,7 @@ export default function Home() {
       {/* Info Section */}
       <section id="contatti" className="py-24 border-t border-border bg-surface/20">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
             {/* Left Column: Info & Contacts */}
             <div className="lg:col-span-5 space-y-10">
