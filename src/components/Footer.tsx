@@ -12,7 +12,7 @@ export default function Footer() {
         <p className="text-xs sm:text-sm text-muted-text/80 tracking-wide font-light">
           Design &amp; Sviluppo:{" "}
           <a
-            href="https://presenzadigitale.io"
+            href="https://presenzadigitale.com"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-accent transition-colors duration-300 font-medium"
