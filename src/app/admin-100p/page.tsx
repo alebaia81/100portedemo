@@ -15,13 +15,50 @@ export default function AdminPage() {
   const [prices, setPrices] = useState<Record<string, number | null>>({});
   const [editingPrice, setEditingPrice] = useState<Record<string, string>>({});
   const [loadingCategory, setLoadingCategory] = useState<string | null>(null);
+  
+  // State for active category filtering
+  const [activeCategory, setActiveCategory] = useState<string>("");
+  const [transitioning, setTransitioning] = useState(false);
+  const [displayCategory, setDisplayCategory] = useState<string>("");
 
-  // Raggruppiamo i prodotti per categoria
+  // Unique sorted list of categories
   const categories = Array.from(new Set(MENU_DATA.map(item => item.category)));
-  const groupedProducts = categories.map(category => ({
-    category,
-    items: MENU_DATA.filter(item => item.category === category)
-  }));
+
+  // Sync hash in URL with active category
+  useEffect(() => {
+    if (categories.length > 0) {
+      const defaultCategory = categories[0];
+      const handleHashChange = () => {
+        const hash = window.location.hash.replace("#cat-", "");
+        const decodedHash = decodeURIComponent(hash);
+        if (categories.includes(decodedHash)) {
+          setActiveCategory(decodedHash);
+        } else {
+          setActiveCategory(defaultCategory);
+        }
+      };
+
+      handleHashChange();
+      window.addEventListener("hashchange", handleHashChange);
+      return () => window.removeEventListener("hashchange", handleHashChange);
+    }
+  }, []);
+
+  // Handle activeCategory changes with smooth transitions
+  useEffect(() => {
+    if (activeCategory) {
+      if (!displayCategory) {
+        setDisplayCategory(activeCategory);
+      } else {
+        setTransitioning(true);
+        const timer = setTimeout(() => {
+          setDisplayCategory(activeCategory);
+          setTransitioning(false);
+        }, 150);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [activeCategory]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -53,7 +90,7 @@ export default function AdminPage() {
     }
   };
 
-  // Toggle singolo prodotto
+  // Toggle single product
   const toggleAvailability = async (id_piatto: string) => {
     const currentState = availability[id_piatto] !== false;
     const newState = !currentState;
@@ -65,18 +102,18 @@ export default function AdminPage() {
     }
   };
 
-  // Toggle intera categoria
+  // Toggle entire category
   const toggleCategory = async (category: string) => {
     const categoryItems = MENU_DATA.filter(item => item.category === category);
     const ids = categoryItems.map(item => item.id);
     
-    // Controlla se almeno un prodotto della categoria è attivo
+    // Check if at least one product in category is active
     const anyActive = ids.some(id => availability[id] !== false);
-    const newState = !anyActive; // se ce n'è uno attivo -> disattiva tutti, altrimenti attiva tutti
+    const newState = !anyActive;
     
     setLoadingCategory(category);
     
-    // Aggiornamento ottimistico
+    // Optimistic update
     const prevAvail = { ...availability };
     const newAvail = { ...availability };
     ids.forEach(id => { newAvail[id] = newState; });
@@ -90,16 +127,14 @@ export default function AdminPage() {
     setLoadingCategory(null);
   };
 
-  // Aggiornamento prezzo
+  // Update price on blur
   const handlePriceBlur = async (id_piatto: string, originalPrice: number) => {
     const inputVal = editingPrice[id_piatto];
     if (inputVal === undefined) return;
     
     const newPrice = inputVal === '' ? null : parseFloat(inputVal);
     
-    // Se il valore è uguale all'originale o è vuoto (reset), aggiorna
     if (newPrice !== null && isNaN(newPrice)) {
-      // Valore non valido, ignoriamo
       setEditingPrice(prev => {
         const next = { ...prev };
         delete next[id_piatto];
@@ -121,10 +156,14 @@ export default function AdminPage() {
     }
   };
 
-  // Controlla se tutta la categoria è attiva
+  // Check if entire category is active
   const isCategoryActive = (category: string) => {
     const items = MENU_DATA.filter(item => item.category === category);
     return items.every(item => availability[item.id] !== false);
+  };
+
+  const handleCategorySelect = (category: string) => {
+    window.location.hash = `cat-${category}`;
   };
 
   if (!isAuthenticated) {
@@ -160,9 +199,14 @@ export default function AdminPage() {
     );
   }
 
+  const activeCategoryItems = MENU_DATA.filter(item => item.category === displayCategory);
+  const catActive = isCategoryActive(displayCategory);
+  const isLoading = loadingCategory === displayCategory;
+
   return (
     <div className="min-h-screen bg-background text-foreground p-4 md:p-8">
-      <div className="max-w-5xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-8">
+        
         {/* Header */}
         <div className="flex justify-between items-center border-b border-border pb-6">
           <div>
@@ -172,111 +216,148 @@ export default function AdminPage() {
           <button onClick={() => setIsAuthenticated(false)} className="text-sm text-muted-text hover:text-foreground border border-border px-4 py-2 rounded-lg hover:border-accent transition-colors">Esci</button>
         </div>
 
-        {/* Menu Navigazione Veloce Categorie */}
-        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur border-b border-border py-4 -mx-4 px-4 md:mx-0 md:px-0">
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-            {groupedProducts.map(group => (
-              <a 
-                key={group.category}
-                href={`#cat-${group.category.replace(/\s+/g, '-')}`}
-                className="whitespace-nowrap px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest bg-surface border border-border hover:border-accent text-muted-text hover:text-accent transition-colors"
-              >
-                {group.category}
-              </a>
-            ))}
+        {/* Mobile Sticky Selector */}
+        <div className="md:hidden sticky top-[0px] z-40 bg-background/95 backdrop-blur border-b border-border py-3 -mx-4 px-4">
+          <div className="relative">
+            <select
+              value={activeCategory}
+              onChange={(e) => handleCategorySelect(e.target.value)}
+              className="w-full bg-surface border border-border text-foreground rounded-lg py-3 px-4 pr-10 text-sm font-bold uppercase tracking-wider appearance-none focus:border-accent outline-none"
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
           </div>
         </div>
 
-        {/* Sezioni raggruppate per categoria */}
-        {groupedProducts.map((group) => {
-          const catActive = isCategoryActive(group.category);
-          const isLoading = loadingCategory === group.category;
+        {/* Grid Layout (Sidebar on Desktop, Content on Right) */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
-          return (
-            <section 
-              key={group.category} 
-              id={`cat-${group.category.replace(/\s+/g, '-')}`} 
-              className="glass-card p-4 md:p-6 scroll-mt-24"
-            >
-              {/* Header Categoria con toggle "Seleziona Tutto" */}
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 pb-4 border-b border-border">
-                <div>
-                  <h2 className="text-xl md:text-2xl font-serif text-accent">{group.category}</h2>
-                  <p className="text-xs text-muted-text mt-1">{group.items.length} prodotti</p>
-                </div>
-                <button 
-                  onClick={() => toggleCategory(group.category)}
-                  disabled={isLoading}
-                  className={`px-4 py-2 rounded-lg text-sm font-bold uppercase tracking-wider transition-all border ${
-                    catActive 
-                      ? 'bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20' 
-                      : 'bg-green-500/10 text-green-400 border-green-500/30 hover:bg-green-500/20'
-                  } ${isLoading ? 'opacity-50 cursor-wait' : ''}`}
+          {/* Sidebar Navigation - Desktop */}
+          <aside className="hidden md:block col-span-1">
+            <div className="sticky top-8 space-y-1 bg-surface/10 p-4 rounded-xl border border-border/30">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-muted-text px-3 mb-3">Categorie</p>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategorySelect(cat)}
+                  className={`w-full text-left px-3.5 py-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border ${
+                    activeCategory === cat
+                      ? "text-accent bg-accent/5 border-l-4 border-l-accent border-y-transparent border-r-transparent pl-3"
+                      : "text-muted-text hover:text-accent border-transparent hover:bg-surface/30"
+                  }`}
                 >
-                  {isLoading ? '...' : catActive ? '✕ Disattiva Tutti' : '✓ Attiva Tutti'}
+                  {cat}
                 </button>
-              </div>
+              ))}
+            </div>
+          </aside>
 
-              {/* Lista prodotti */}
-              <div className="space-y-3">
-                {group.items.map((item) => {
-                  const isAvailable = availability[item.id] !== false;
-                  const overriddenPrice = prices[item.id];
-                  const displayPrice = overriddenPrice !== null && overriddenPrice !== undefined ? overriddenPrice : item.price;
-                  const isEditing = editingPrice[item.id] !== undefined;
+          {/* Active Category Editor Section */}
+          <main className="col-span-1 md:col-span-3">
+            <div className={`transition-all duration-150 transform ${
+              transitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
+            }`}>
+              {displayCategory && (
+                <section className="glass-card p-4 md:p-6">
                   
-                  return (
-                    <div key={item.id} className={`flex flex-col sm:flex-row justify-between sm:items-center gap-3 p-3 rounded-lg border transition-all ${isAvailable ? 'border-border hover:border-accent/30 bg-surface/30' : 'border-border/50 bg-surface/10 opacity-60'}`}>
-                      {/* Info prodotto */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-sm md:text-base truncate">{item.name}</h3>
-                        <p className="text-xs text-muted-text truncate">{item.description}</p>
-                      </div>
-                      
-                      {/* Controlli */}
-                      <div className="flex items-center gap-3 flex-shrink-0">
-                        {/* Campo Prezzo */}
-                        <div className="flex items-center gap-1">
-                          <span className="text-xs text-muted-text">€</span>
-                          <input
-                            type="number"
-                            step="0.5"
-                            min="0"
-                            value={isEditing ? editingPrice[item.id] : displayPrice.toFixed(2)}
-                            onChange={(e) => setEditingPrice(prev => ({ ...prev, [item.id]: e.target.value }))}
-                            onBlur={() => handlePriceBlur(item.id, item.price)}
-                            onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
-                            className={`w-20 bg-background border rounded px-2 py-1 text-sm text-right font-mono focus:border-accent outline-none ${
-                              overriddenPrice !== null && overriddenPrice !== undefined && overriddenPrice !== item.price
-                                ? 'border-accent/50 text-accent' 
-                                : 'border-border'
-                            }`}
-                          />
-                        </div>
-
-                        {/* Stato */}
-                        <span className={`text-xs font-bold uppercase w-20 text-center ${isAvailable ? 'text-green-500' : 'text-red-500'}`}>
-                          {isAvailable ? 'Attivo' : 'Spento'}
-                        </span>
-                        
-                        {/* Toggle Switch */}
-                        <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
-                          <input 
-                            type="checkbox" 
-                            className="sr-only peer"
-                            checked={isAvailable}
-                            onChange={() => toggleAvailability(item.id)}
-                          />
-                          <div className="w-11 h-6 bg-surface peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent border border-border"></div>
-                        </label>
-                      </div>
+                  {/* Category Header with Toggle All Switch */}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-border">
+                    <div>
+                      <h2 className="text-xl md:text-2xl font-serif text-accent">{displayCategory}</h2>
+                      <p className="text-xs text-muted-text mt-1">{activeCategoryItems.length} prodotti</p>
                     </div>
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })}
+                    <button 
+                      onClick={() => toggleCategory(displayCategory)}
+                      disabled={isLoading}
+                      className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all border ${
+                        catActive 
+                          ? 'bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20' 
+                          : 'bg-green-500/10 text-green-400 border-green-500/30 hover:bg-green-500/20'
+                      } ${isLoading ? 'opacity-50 cursor-wait' : ''}`}
+                    >
+                      {isLoading ? '...' : catActive ? '✕ Disattiva Tutti' : '✓ Attiva Tutti'}
+                    </button>
+                  </div>
+
+                  {/* List of Products in Selected Category */}
+                  <div className="space-y-3">
+                    {activeCategoryItems.map((item) => {
+                      const isAvailable = availability[item.id] !== false;
+                      const overriddenPrice = prices[item.id];
+                      const displayPrice = overriddenPrice !== null && overriddenPrice !== undefined ? overriddenPrice : item.price;
+                      const isEditing = editingPrice[item.id] !== undefined;
+                      
+                      return (
+                        <div key={item.id} className={`flex flex-col sm:flex-row justify-between sm:items-center gap-3 p-4 rounded-lg border transition-all ${
+                          isAvailable 
+                            ? 'border-border hover:border-accent/30 bg-surface/30 shadow-sm' 
+                            : 'border-border/30 bg-surface/5 opacity-60'
+                        }`}>
+                          
+                          {/* Info Product */}
+                          <div className="flex-1 min-w-0 pr-2">
+                            <h3 className="font-bold text-sm md:text-base leading-snug">{item.name}</h3>
+                            <p className="text-xs text-muted-text mt-1 line-clamp-2 leading-relaxed">{item.description}</p>
+                          </div>
+                          
+                          {/* Editor Controls */}
+                          <div className="flex items-center justify-between sm:justify-start gap-4 flex-shrink-0 border-t border-border/30 pt-3 sm:pt-0 sm:border-none">
+                            
+                            {/* Price Field */}
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-xs text-muted-text font-mono">€</span>
+                              <input
+                                type="number"
+                                step="0.5"
+                                min="0"
+                                value={isEditing ? editingPrice[item.id] : displayPrice.toFixed(2)}
+                                onChange={(e) => setEditingPrice(prev => ({ ...prev, [item.id]: e.target.value }))}
+                                onBlur={() => handlePriceBlur(item.id, item.price)}
+                                onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
+                                className={`w-20 bg-background border rounded px-2 py-1 text-sm text-right font-mono focus:border-accent outline-none ${
+                                  overriddenPrice !== null && overriddenPrice !== undefined && overriddenPrice !== item.price
+                                    ? 'border-accent/50 text-accent font-bold' 
+                                    : 'border-border'
+                                }`}
+                              />
+                            </div>
+
+                            {/* Status State Label */}
+                            <span className={`text-xs font-bold uppercase w-16 text-center ${isAvailable ? 'text-green-500' : 'text-red-500'}`}>
+                              {isAvailable ? 'Attivo' : 'Spento'}
+                            </span>
+                            
+                            {/* Custom Switch Toggle */}
+                            <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
+                              <input 
+                                type="checkbox" 
+                                className="sr-only peer"
+                                checked={isAvailable}
+                                onChange={() => toggleAvailability(item.id)}
+                              />
+                              <div className="w-11 h-6 bg-surface peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent border border-border"></div>
+                            </label>
+                          </div>
+
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                </section>
+              )}
+            </div>
+          </main>
+
+        </div>
+
       </div>
       <ScrollToTop bottomOffset="bottom-6" />
     </div>

@@ -16,5 +16,6 @@ export const MENU_DATA: Product[] = menuJson.map((item) => ({
   description: item.description,
   price: item.price,
   category: item.category,
+  image: item.image,
   promo: item.promo ?? false,
 }));
