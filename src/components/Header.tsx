@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Phone } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const InstagramIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
   <svg 
@@ -22,10 +25,19 @@ const InstagramIcon = ({ size = 24, className = "" }: { size?: number, className
 );
 
 export default function Header() {
+  const pathname = usePathname();
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (pathname === "/") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-6 h-20 flex justify-between items-center">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center" onClick={handleLogoClick}>
           <Image
             src="/images/logo.png"
             alt="100 Porte Pub"
