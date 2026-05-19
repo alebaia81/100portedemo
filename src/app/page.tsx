@@ -75,6 +75,38 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Chi Siamo Section */}
+      <section id="chi-siamo" className="py-24 bg-background border-b border-border scroll-mt-24">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            {/* Left Column: Heading */}
+            <div className="lg:col-span-5 space-y-4">
+              <span className="text-sm font-bold uppercase tracking-widest text-accent block">La Nostra Storia</span>
+              <h2 className="text-4xl md:text-5xl font-serif text-foreground leading-tight">
+                Cento Porte: <br />
+                Il Salotto del Gusto a <span className="text-accent italic">Castelvetro</span>.
+              </h2>
+              <div className="w-20 h-[2px] bg-accent mt-4" />
+            </div>
+
+            {/* Right Column: Paragraph Copy */}
+            <div className="lg:col-span-7 space-y-6 text-muted-text text-base md:text-lg leading-relaxed font-light">
+              <p>
+                Nato come punto di incontro per generazioni, <span className="text-foreground font-medium">Cento Porte</span> unisce l&apos;anima autentica del pub di provincia alla continua ricerca culinaria. I nostri panini storici raccontano la tradizione locale, mentre gli hamburger gourmet celebrano l&apos;evoluzione del gusto.
+              </p>
+              <p>
+                Prepariamo ogni piatto utilizzando solo tagli pregiati selezionati — come la pregiata <span className="text-accent font-semibold">Chianina IGP</span>, il saporito <span className="text-accent font-semibold">Black Angus</span> irlandese e la rinomata carne di <span className="text-accent font-semibold">Wagyu giapponese</span> — abbinandoli a ingredienti freschi e di qualità.
+              </p>
+              <p>
+                Che sia per una cena in compagnia, per tifare la tua squadra del cuore davanti ai nostri maxi schermi o semplicemente per goderti una birra artigianale spillata a regola d&apos;arte, da Cento Porte trovi sempre un&apos;atmosfera calda, un servizio ospitale ed un sapore indimenticabile.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* Reviews Section */}
       <section className="py-24 bg-background">
         <div className="container mx-auto px-6">

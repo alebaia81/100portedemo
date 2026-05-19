@@ -49,7 +49,7 @@ export default function Header() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-muted-text">
-          <Link href="/menu" className="hover:text-accent transition-colors">Il Menù</Link>
+          <Link href="/#chi-siamo" className="hover:text-accent transition-colors">Chi Siamo</Link>
           <Link href="/#contatti" className="hover:text-accent transition-colors">Dove Siamo</Link>
           <Link href="/menu" className="bg-accent text-background px-5 py-2 rounded-lg hover:bg-accent/90 transition-colors font-bold tracking-wider">Ordina Ora</Link>
         </nav>
