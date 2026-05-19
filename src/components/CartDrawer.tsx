@@ -145,16 +145,22 @@ export default function CartDrawer() {
             {/* Modalità: Ritiro o Consegna */}
             <div className="flex bg-surface p-1 rounded-lg border border-border">
               <button 
+                type="button"
                 onClick={() => setOrderType('ritiro')}
                 className={`flex-1 py-2 text-sm font-bold uppercase tracking-wider rounded-md transition-colors ${orderType === 'ritiro' ? 'bg-accent text-background' : 'text-muted-text hover:text-foreground'}`}
               >
                 Ritiro
               </button>
               <button 
-                onClick={() => setOrderType('domicilio')}
-                className={`flex-1 py-2 text-sm font-bold uppercase tracking-wider rounded-md transition-colors ${orderType === 'domicilio' ? 'bg-accent text-background' : 'text-muted-text hover:text-foreground'}`}
+                type="button"
+                disabled
+                className="flex-1 py-2 text-sm font-bold uppercase tracking-wider rounded-md text-muted-text/30 cursor-not-allowed flex items-center justify-center gap-1.5"
+                title="Servizio a domicilio in arrivo!"
               >
                 Consegna
+                <span className="text-[9px] px-1.5 py-0.5 bg-accent/20 text-accent rounded font-serif italic normal-case tracking-normal">
+                  In arrivo
+                </span>
               </button>
             </div>
 

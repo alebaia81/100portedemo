@@ -51,8 +51,8 @@ export default function Home() {
               <div className="p-4 bg-accent/10 rounded-full mb-4 text-accent">
                 <ShoppingBag size={28} />
               </div>
-              <h3 className="font-bold text-sm uppercase tracking-widest text-foreground">Delivery & Asporto</h3>
-              <p className="text-xs text-muted-text mt-2 leading-relaxed">Tutto il nostro menù <br/>direttamente a casa tua</p>
+              <h3 className="font-bold text-sm uppercase tracking-widest text-foreground">Asporto & Ritiro</h3>
+              <p className="text-xs text-muted-text mt-2 leading-relaxed">Ordina online e ritira <br/>il tuo menù caldo al pub</p>
             </div>
 
             <div className="flex flex-col items-center justify-center md:border-r border-border/50 px-4">
