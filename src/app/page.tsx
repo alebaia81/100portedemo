@@ -18,16 +18,16 @@ export default function Home() {
         <div className="relative z-10 container mx-auto px-6 text-center">
           <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6 tracking-tighter">
             L&apos;Hamburgeria di <br />
-            <span className="text-accent italic font-serif">Castelvetro</span>
+            <span className="text-white italic font-serif">Castelvetro</span>
           </h1>
           <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-text mb-10 leading-relaxed">
             Carni selezionate, birre artigianali e l&apos;atmosfera autentica di un pub che ha fatto la storia locale.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/menu" className="btn-primary text-lg px-10 py-4">
+            <Link href="/menu" className="btn-logo-blue text-lg px-10 py-4">
               Ordina Ora
             </Link>
-            <a href="#contatti" className="px-10 py-4 bg-surface/50 border border-border rounded-lg font-bold hover:bg-surface transition-all">
+            <a href="#contatti" className="btn-amber-glow text-lg px-10 py-4 text-center">
               Vieni a trovarci
             </a>
           </div>
@@ -360,7 +360,7 @@ export default function Home() {
         </a>
         <Link 
           href="/menu"
-          className="flex-2 flex-grow flex items-center justify-center gap-2 py-3 bg-accent text-background rounded-lg font-bold text-sm hover:bg-accent/90 transition-colors"
+          className="flex-2 flex-grow flex items-center justify-center gap-2 py-3 btn-logo-blue text-sm"
         >
           <ShoppingBag size={16} /> Ordina Ora
         </Link>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+
 import { Phone } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -23,7 +24,6 @@ const InstagramIcon = ({ size = 24, className = "" }: { size?: number, className
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
   </svg>
 );
-
 export default function Header() {
   const pathname = usePathname();
 
@@ -51,14 +51,14 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-muted-text">
           <Link href="/#chi-siamo" className="hover:text-accent transition-colors">Chi Siamo</Link>
           <Link href="/#contatti" className="hover:text-accent transition-colors">Dove Siamo</Link>
-          <Link href="/menu" className="bg-accent text-background px-5 py-2 rounded-lg hover:bg-accent/90 transition-colors font-bold tracking-wider">Ordina Ora</Link>
+          <Link href="/menu" className="btn-logo-blue px-5 py-2 tracking-wider">Ordina Ora</Link>
         </nav>
 
         <div className="flex items-center gap-3">
           {/* Ordina Ora visibile solo su mobile */}
           <Link 
             href="/menu" 
-            className="md:hidden bg-accent text-background px-4 py-2 rounded-lg text-sm font-bold tracking-wider hover:bg-accent/90 transition-colors"
+            className="md:hidden btn-logo-blue px-4 py-2 text-sm tracking-wider"
           >
             Ordina Ora
           </Link>

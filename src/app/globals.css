@@ -46,6 +46,14 @@
     @apply bg-accent text-background font-bold py-3 px-6 rounded-lg transition-all hover:bg-accent-hover active:scale-95;
   }
   
+  .btn-amber-glow {
+    @apply bg-transparent border border-[#c8873a] text-[#e8b86d] font-bold py-3 px-6 rounded-lg transition-all shadow-[0_0_15px_rgba(200,135,58,0.3)] hover:shadow-[0_0_25px_rgba(200,135,58,0.6)] hover:bg-[#c8873a] hover:text-[#0f0d0a] active:scale-95;
+  }
+  
+  .btn-logo-blue {
+    @apply bg-[#b1c7f1] border-2 border-[#c8873a] text-[#0f0d0a] font-bold py-3 px-6 rounded-lg transition-all hover:bg-[#d1e0fc] active:scale-95;
+  }
+  
   .glass-card {
     @apply bg-surface border border-border rounded-xl shadow-xl backdrop-blur-sm;
   }
