@@ -121,7 +121,7 @@ export default function Home() {
               </div>
               <span className="font-bold tracking-widest uppercase text-sm">Feedback</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-serif text-accent mb-4">Dicono di noi</h2>
+            <h2 className="text-4xl md:text-5xl font-serif text-[#b1c7f1] mb-4">Dicono di noi</h2>
             <p className="text-muted-text">Più di una semplice hamburgeria. Una garanzia.</p>
           </div>
 
@@ -277,7 +277,7 @@ export default function Home() {
               <div className="space-y-8">
                 {/* Indirizzo */}
                 <div className="flex items-start gap-4">
-                  <div className="mt-1 text-accent">
+                  <div className="mt-1 text-[#b1c7f1]">
                     <MapPin size={24} />
                   </div>
                   <div>
@@ -289,7 +289,7 @@ export default function Home() {
 
                 {/* Orari */}
                 <div className="flex items-start gap-4">
-                  <div className="mt-1 text-accent">
+                  <div className="mt-1 text-[#b1c7f1]">
                     <Clock size={24} />
                   </div>
                   <div>
@@ -301,7 +301,7 @@ export default function Home() {
 
                 {/* Telefono */}
                 <div className="flex items-start gap-4">
-                  <div className="mt-1 text-accent">
+                  <div className="mt-1 text-[#b1c7f1]">
                     <Phone size={24} />
                   </div>
                   <div>
@@ -312,7 +312,7 @@ export default function Home() {
               </div>
 
               <div className="pt-4">
-                <a href="tel:+393319121091" className="btn-primary inline-block px-10 py-4 text-lg">
+                <a href="tel:+393319121091" className="btn-amber-glow inline-block px-10 py-4 text-lg">
                   Prenota un tavolo
                 </a>
               </div>
