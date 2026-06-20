@@ -59,7 +59,7 @@
   { "id": "pizza-mare-monti", "name": "Pizza Mare e monti", "description": "Pomodoro, mozzarella, funghi, gamberetti", "price": 9.0, "category": "Le Pizze & Pinse", "promo": false },
   { "id": "pizza-maialina", "name": "Pizza Maialina", "description": "Pomodoro, mozzarella, würstel, cotto, salsiccia", "price": 9.0, "category": "Le Pizze & Pinse", "promo": false },
   { "id": "pizza-prelibata", "name": "Pizza Prelibata", "description": "Pomodoro, mozzarella, funghi, speck, olio tartufato", "price": 9.0, "category": "Le Pizze & Pinse", "promo": false },
-  { "id": "pizza-100porte", "name": "Pizza 100 porte", "description": "Pomodoro, mozzarella, funghi, salsiccia, cotto, peperoncino", "price": 9.0, "category": "Le Pizze & Pinse", "promo": false },
+  { "id": "pizza-burgerlab", "name": "Pizza Burger Lab", "description": "Pomodoro, mozzarella, funghi, salsiccia, cotto, peperoncino", "price": 9.0, "category": "Le Pizze & Pinse", "promo": false },
   { "id": "pizza-cami", "name": "Pizza Cami", "description": "Pomodoro, mozzarella, uovo, grana, salsiccia", "price": 9.5, "category": "Le Pizze & Pinse", "promo": false },
   { "id": "pizza-delicata", "name": "Pizza Delicata", "description": "Mozzarella, crescenza, carciofi, crudo", "price": 9.0, "category": "Le Pizze & Pinse", "promo": false },
   { "id": "pinsa-margherita", "name": "Maxi Pinsa Margherita", "description": "Maxi pinsa al tagliere da gustare in compagnia. Pomodoro, mozzarella, origano", "price": 16.0, "category": "Le Pizze & Pinse", "promo": false },

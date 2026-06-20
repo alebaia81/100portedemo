@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 
 import { Phone } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -37,15 +36,15 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-6 h-20 flex justify-between items-center">
-        <Link href="/" className="flex items-center" onClick={handleLogoClick}>
-          <Image
-            src="/images/logo.png"
-            alt="100 Porte Pub"
-            width={200}
-            height={60}
-            className="h-11 md:h-14 w-auto object-contain mix-blend-screen invert hue-rotate-180 drop-shadow-[0_0_8px_rgba(200,135,58,0.6)]"
-            priority
-          />
+        <Link href="/" className="flex items-center gap-2" onClick={handleLogoClick}>
+          <div className="flex flex-col text-left drop-shadow-[0_0_8px_rgba(200,135,58,0.4)]">
+            <span className="text-2xl md:text-3xl font-serif font-black tracking-wider text-accent uppercase leading-none">
+              Burger
+            </span>
+            <span className="text-xs md:text-sm font-sans font-bold tracking-[0.25em] text-white uppercase leading-none mt-1">
+              Lab
+            </span>
+          </div>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-muted-text">
@@ -63,13 +62,13 @@ export default function Header() {
             Ordina Ora
           </Link>
           <a 
-            href="tel:+393398156719" 
+            href="tel:+393331234567" 
             className="p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-transform"
           >
             <Phone size={18} />
           </a>
           <a 
-            href="https://www.instagram.com/centoporte_pub/" 
+            href="#" 
             target="_blank"
             className="hidden sm:block p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-transform"
           >

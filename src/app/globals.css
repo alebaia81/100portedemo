@@ -51,7 +51,7 @@
   }
   
   .btn-logo-blue {
-    @apply bg-[#b1c7f1] border-2 border-[#c8873a] text-[#0f0d0a] font-bold py-3 px-6 rounded-lg transition-all hover:bg-[#d1e0fc] active:scale-95;
+    @apply bg-accent border-2 border-accent text-background font-bold py-3 px-6 rounded-lg transition-all hover:bg-accent-hover active:scale-95;
   }
   
   .glass-card {

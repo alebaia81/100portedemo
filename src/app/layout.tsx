@@ -13,12 +13,12 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Cento Porte Hamburgeria | Castelvetro Piacentino (PC)",
-  description: "La migliore hamburgeria di Castelvetro Piacentino. Hamburger gourmet con carni Chianina, Angus e Fassona. Ordina asporto via WhatsApp!",
-  keywords: ["hamburgeria castelvetro piacentino", "hamburger piacenza", "cento porte pub", "hamburgeria gourmet piacenza"],
+  title: "Burger Lab | L'Hamburgeria Gourmet",
+  description: "Hamburgeria Gourmet e Birreria Artigianale. Hamburger gourmet con ingredienti selezionati e carni pregiate. Ordina asporto via WhatsApp!",
+  keywords: ["hamburgeria gourmet", "hamburger gourmet", "birreria artigianale", "burger lab"],
   openGraph: {
-    title: "Cento Porte Hamburgeria | Castelvetro Piacentino",
-    description: "Burger gourmet e birre artigianali a Castelvetro Piacentino.",
+    title: "Burger Lab | L'Hamburgeria Gourmet",
+    description: "Burger gourmet e birre artigianali di qualità superiore.",
     type: "website",
     locale: "it_IT",
   },

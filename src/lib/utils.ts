@@ -27,7 +27,7 @@ export function generateWhatsAppLink(
   
   const listaPiatti = items.map(item => `${item.quantity}x ${item.name}`).join("\n- ");
   
-  let message = `\u{1F354} *NUOVO ORDINE - 100 PORTE*\n\n`;
+  let message = `\u{1F354} *NUOVO ORDINE - BURGER LAB*\n\n`;
   message += `\u{1F464} *Nome:* ${customerName}\n`;
   message += `\u{1F4E6} *Modalita:* ${orderType === 'domicilio' ? 'Consegna a Domicilio' : 'Ritiro al Locale'}\n`;
   

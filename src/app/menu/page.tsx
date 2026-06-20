@@ -70,7 +70,7 @@ export default function MenuPage() {
           <select
             value={activeCategory}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="w-full bg-surface border border-border rounded-xl px-4 py-3 text-sm font-bold uppercase tracking-widest text-[#b1c7f1] appearance-none focus:outline-none focus:border-[#b1c7f1]/60 shadow-lg cursor-pointer"
+            className="w-full bg-surface border border-border rounded-xl px-4 py-3 text-sm font-bold uppercase tracking-widest text-accent appearance-none focus:outline-none focus:border-accent/60 shadow-lg cursor-pointer"
           >
             {categories.map((cat, idx) => (
               <option key={idx} value={cat} className="bg-background text-foreground font-bold uppercase tracking-widest">
@@ -79,7 +79,7 @@ export default function MenuPage() {
             ))}
           </select>
           {/* Custom Chevron Icon */}
-          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-[#b1c7f1]">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-accent">
             <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
               <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
             </svg>
@@ -104,13 +104,13 @@ export default function MenuPage() {
                     onClick={() => handleCategoryChange(cat)}
                     className={`group flex items-center text-left py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-200 relative ${
                       isActive 
-                        ? "text-[#b1c7f1] bg-[#b1c7f1]/5 font-extrabold shadow-sm border border-[#b1c7f1]/20" 
-                        : "text-muted-text hover:text-[#b1c7f1] hover:bg-surface/30 border border-transparent"
+                        ? "text-accent bg-accent/5 font-extrabold shadow-sm border border-accent/20" 
+                        : "text-muted-text hover:text-accent hover:bg-surface/30 border border-transparent"
                     }`}
                   >
                     {/* Indicatore dorato a sinistra */}
                     {isActive && (
-                      <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-[#b1c7f1] rounded-full" />
+                      <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-accent rounded-full" />
                     )}
                     <span className={isActive ? "translate-x-1.5 transition-transform" : "group-hover:translate-x-1 transition-transform"}>
                       {cat}

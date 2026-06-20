@@ -49,7 +49,7 @@ export default function CartDrawer() {
     }
     
     const link = generateWhatsAppLink(
-      process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "3398156719", 
+      process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "3331234567", 
       items, 
       total, 
       customerName, 
@@ -153,14 +153,10 @@ export default function CartDrawer() {
               </button>
               <button 
                 type="button"
-                disabled
-                className="flex-1 py-2 text-sm font-bold uppercase tracking-wider rounded-md text-muted-text/30 cursor-not-allowed flex items-center justify-center gap-1.5"
-                title="Servizio a domicilio in arrivo!"
+                onClick={() => setOrderType('domicilio')}
+                className={`flex-1 py-2 text-sm font-bold uppercase tracking-wider rounded-md transition-colors ${orderType === 'domicilio' ? 'bg-accent text-background' : 'text-muted-text hover:text-foreground'}`}
               >
                 Consegna
-                <span className="text-[9px] px-1.5 py-0.5 bg-accent/20 text-accent rounded font-serif italic normal-case tracking-normal">
-                  In arrivo
-                </span>
               </button>
             </div>
 
@@ -185,7 +181,7 @@ export default function CartDrawer() {
                   </label>
                   <input
                     type="text"
-                    placeholder="Via Roma 11, Castelvetro Piacentino"
+                    placeholder="Via Roma 11, Milano"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     className="w-full bg-surface border border-border rounded-lg p-3 focus:border-accent outline-none text-sm"

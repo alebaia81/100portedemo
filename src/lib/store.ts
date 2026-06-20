@@ -61,7 +61,7 @@ export const useCart = create<CartState>()(
       },
     }),
     {
-      name: 'cento-porte-cart',
+      name: 'burger-lab-cart',
     }
   )
 );

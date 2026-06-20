@@ -1,7 +1,6 @@
 import Header from "@/components/Header";
-import CartDrawer from "@/components/CartDrawer";
 import Footer from "@/components/Footer";
-import { Clock, MapPin, Beer, Utensils, Zap, Phone, Tv, Flame, Users, ShoppingBag } from "lucide-react";
+import { Clock, MapPin, Phone, Tv, Flame, Users, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 
 export default function Home() {
@@ -17,8 +16,8 @@ export default function Home() {
         
         <div className="relative z-10 container mx-auto px-6 text-center">
           <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6 tracking-tighter">
-            L&apos;Hamburgeria di <br />
-            <span className="text-white italic font-serif">Castelvetro</span>
+            L&apos;Hamburgeria <br />
+            <span className="text-white italic font-serif">Gourmet</span>
           </h1>
           <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-text mb-10 leading-relaxed">
             Carni selezionate, birre artigianali e l&apos;atmosfera autentica di un pub che ha fatto la storia locale.
@@ -84,8 +83,8 @@ export default function Home() {
             <div className="lg:col-span-5 space-y-4">
               <span className="text-sm font-bold uppercase tracking-widest text-accent block">La Nostra Storia</span>
               <h2 className="text-4xl md:text-5xl font-serif text-foreground leading-tight">
-                Cento Porte: <br />
-                Il Salotto del Gusto a <span className="text-accent italic">Castelvetro</span>.
+                Burger Lab: <br />
+                Il Salotto del Gusto <span className="text-accent italic">Gourmet</span>.
               </h2>
               <div className="w-20 h-[2px] bg-accent mt-4" />
             </div>
@@ -93,13 +92,13 @@ export default function Home() {
             {/* Right Column: Paragraph Copy */}
             <div className="lg:col-span-7 space-y-6 text-muted-text text-base md:text-lg leading-relaxed font-light">
               <p>
-                Nato come punto di incontro per generazioni, <span className="text-foreground font-medium">Cento Porte</span>{" "}unisce l&apos;anima autentica del pub di provincia alla continua ricerca culinaria. I nostri panini storici raccontano la tradizione locale, mentre gli hamburger gourmet celebrano l&apos;evoluzione del gusto.
+                Nato come punto di incontro per generazioni, <span className="text-foreground font-medium">Burger Lab</span>{" "}unisce l&apos;anima autentica del pub di provincia alla continua ricerca culinaria. I nostri panini storici raccontano la tradizione locale, mentre gli hamburger gourmet celebrano l&apos;evoluzione del gusto.
               </p>
               <p>
                 Prepariamo ogni piatto utilizzando solo tagli pregiati selezionati — come la pregiata <span className="text-accent font-semibold">Chianina IGP</span>, il saporito <span className="text-accent font-semibold">Black Angus</span> irlandese e la rinomata carne di <span className="text-accent font-semibold">Wagyu giapponese</span> — abbinandoli a ingredienti freschi e di qualità.
               </p>
               <p>
-                Che sia per una cena in compagnia, per tifare la tua squadra del cuore davanti ai nostri maxi schermi o semplicemente per goderti una birra artigianale spillata a regola d&apos;arte, da Cento Porte trovi sempre un&apos;atmosfera calda, un servizio ospitale ed un sapore indimenticabile.
+                Che sia per una cena in compagnia, per tifare la tua squadra del cuore davanti ai nostri maxi schermi o semplicemente per goderti una birra artigianale spillata a regola d&apos;arte, da Burger Lab trovi sempre un&apos;atmosfera calda, un servizio ospitale ed un sapore indimenticabile.
               </p>
             </div>
 
@@ -121,7 +120,7 @@ export default function Home() {
               </div>
               <span className="font-bold tracking-widest uppercase text-sm">Feedback</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-serif text-[#b1c7f1] mb-4">Dicono di noi</h2>
+            <h2 className="text-4xl md:text-5xl font-serif text-accent mb-4">Dicono di noi</h2>
             <p className="text-muted-text">Più di una semplice hamburgeria. Una garanzia.</p>
           </div>
 
@@ -141,7 +140,7 @@ export default function Home() {
                 ))}
               </div>
               <p className="text-sm text-muted-text italic flex-grow">
-                "Una garanzia per la serata! Il Wagyu Burger è qualcosa di eccezionale e la selezione di birre artigianali non delude mai. Personale simpatico e locale super accogliente. Consigliatissimo."
+                {"\"Una garanzia per la serata! Il Wagyu Burger è qualcosa di eccezionale e la selezione di birre artigianali non delude mai. Personale simpatico e locale super accogliente. Consigliatissimo.\""}
               </p>
             </div>
 
@@ -160,7 +159,7 @@ export default function Home() {
                 ))}
               </div>
               <p className="text-sm text-muted-text italic flex-grow">
-                "Punto di ritrovo fisso! Che sia per una cena al volo o per il fine serata, le loro pinse e i mitici 'Panini Storici' sono imbattibili. Ottima anche l'area per guardare le partite."
+                {"\"Punto di ritrovo fisso! Che sia per una cena al volo o per il fine serata, le loro pinse e i mitici 'Panini Storici' sono imbattibili. Ottima anche l'area per guardare le partite.\""}
               </p>
             </div>
 
@@ -179,14 +178,14 @@ export default function Home() {
                 ))}
               </div>
               <p className="text-sm text-muted-text italic flex-grow">
-                "Servizio veloce e qualità altissima. Ho provato il Doppio Manzo e le Patatas Diablo... spettacolo! Il locale ha un'atmosfera fantastica, perfetta per passare una serata tra amici."
+                {"\"Servizio veloce e qualità altissima. Ho provato il Doppio Manzo e le Patatas Diablo... spettacolo! Il locale ha un'atmosfera fantastica, perfetta per passare una serata tra amici.\""}
               </p>
             </div>
           </div>
           
           <div className="mt-12 text-center">
             <a 
-              href="https://www.google.com/search?q=cento+porte+castelvetro+piacentino+recensioni" 
+              href="https://www.google.com/search?q=hamburgeria+gourmet+recensioni" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm text-accent hover:underline font-bold uppercase tracking-widest"
@@ -204,11 +203,11 @@ export default function Home() {
             <div>
               <span className="text-sm font-bold uppercase tracking-widest text-accent mb-4 block">Atmosfera</span>
               <h2 className="text-4xl md:text-5xl font-serif text-foreground max-w-2xl">
-                Vivi l'esperienza nel nostro salotto rustico.
+                Vivi l&apos;esperienza nel nostro salotto rustico.
               </h2>
             </div>
             <a 
-              href="https://www.instagram.com/centoporte_pub/" 
+              href="#" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-accent hover:text-accent/80 transition-colors border-b border-accent pb-1"
@@ -277,19 +276,19 @@ export default function Home() {
               <div className="space-y-8">
                 {/* Indirizzo */}
                 <div className="flex items-start gap-4">
-                  <div className="mt-1 text-[#b1c7f1]">
+                  <div className="mt-1 text-accent">
                     <MapPin size={24} />
                   </div>
                   <div>
                     <p className="font-bold uppercase tracking-widest text-xs text-muted-text mb-1">Indirizzo</p>
                     <p className="text-foreground text-lg">Via Roma 11</p>
-                    <p className="text-muted-text">29010 Castelvetro Piacentino (PC)</p>
+                    <p className="text-muted-text">20121 Milano (MI)</p>
                   </div>
                 </div>
 
                 {/* Orari */}
                 <div className="flex items-start gap-4">
-                  <div className="mt-1 text-[#b1c7f1]">
+                  <div className="mt-1 text-accent">
                     <Clock size={24} />
                   </div>
                   <div>
@@ -301,18 +300,18 @@ export default function Home() {
 
                 {/* Telefono */}
                 <div className="flex items-start gap-4">
-                  <div className="mt-1 text-[#b1c7f1]">
+                  <div className="mt-1 text-accent">
                     <Phone size={24} />
                   </div>
                   <div>
                     <p className="font-bold uppercase tracking-widest text-xs text-muted-text mb-1">Prenotazioni</p>
-                    <p className="text-foreground text-lg">+39 331 912 1091</p>
+                    <p className="text-foreground text-lg">+39 333 123 4567</p>
                   </div>
                 </div>
               </div>
 
               <div className="pt-4">
-                <a href="tel:+393319121091" className="btn-amber-glow inline-block px-10 py-4 text-lg">
+                <a href="tel:+393331234567" className="btn-amber-glow inline-block px-10 py-4 text-lg">
                   Prenota un tavolo
                 </a>
               </div>
@@ -321,7 +320,7 @@ export default function Home() {
             {/* Right Column: Map */}
             <div className="lg:col-span-7 h-[500px] lg:h-[600px] w-full relative rounded-2xl overflow-hidden border border-border glass-card group">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2830.4908906512683!2d9.9895777!3d45.0963202!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4780fd6b7e49afcb%3A0x6ac342f1f317b60e!2s100+porte+hamburgeria!5e0!3m2!1sit!2sit!4v1716060000000!5m2!1sit!2sit" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2798.2435777610196!2d9.1895697!3d45.4641979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4786c14ea547af8d%3A0x9597ad8d9ff5f2db!2sPiazza%20del%20Duomo%2C%20Milano!5e0!3m2!1sit!2sit!4v1716060000000!5m2!1sit!2sit" 
                 width="100%" 
                 height="100%" 
                 style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) contrast(100%)' }} 
@@ -333,12 +332,12 @@ export default function Home() {
               
               {/* Floating Info Box on Map (similar to screenshot) */}
               <a 
-                href="https://maps.app.goo.gl/LsbVCHs3r5K6kVUp8"
+                href="https://maps.google.com/?q=Via+Roma+11+Milano"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="absolute bottom-6 left-6 right-6 md:right-auto bg-surface/95 backdrop-blur-md p-4 rounded-xl border border-border shadow-2xl transition-transform transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 hover:border-accent/40 block transition-all duration-300"
               >
-                <p className="font-serif text-accent font-bold text-lg">100 Porte Hamburgeria</p>
+                <p className="font-serif text-accent font-bold text-lg">Burger Lab</p>
                 <p className="text-xs text-muted-text uppercase tracking-widest mt-1">Clicca per aprire in Maps</p>
               </a>
             </div>
@@ -353,7 +352,7 @@ export default function Home() {
       {/* Sticky Bottom CTA - solo mobile */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-background/95 backdrop-blur border-t border-border p-4 flex gap-3">
         <a 
-          href="tel:+393398156719"
+          href="tel:+393331234567"
           className="flex-1 flex items-center justify-center gap-2 py-3 border border-border rounded-lg font-bold text-sm hover:border-accent transition-colors"
         >
           <Phone size={16} /> Chiama
