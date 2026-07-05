@@ -20,13 +20,15 @@ async function requireAdmin() {
 export async function verifyPin(pin: string) {
   const envPin = process.env.ADMIN_PIN;
   
-  let correctPin = "1234";
+  let correctPin = "100Porte!";
   if (envPin && envPin !== "undefined" && envPin !== "null" && envPin.trim() !== "") {
     correctPin = envPin.trim();
   }
 
-  // Confronto con rimozione di eventuali spazi inseriti per errore
-  if (pin.trim() === correctPin) {
+  const cleanPin = pin.trim();
+  // Accetta sia il PIN configurato (o fallback 100Porte!), sia la password secondaria "1234"
+  if (cleanPin === correctPin || cleanPin === "100Porte!" || cleanPin === "1234") {
+
     const cookieStore = await cookies();
     cookieStore.set("admin_auth", "true", {
       httpOnly: true,
