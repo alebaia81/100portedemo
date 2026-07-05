@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { Lock } from "lucide-react";
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -18,7 +21,18 @@ export default function Footer() {
             Presenza Digitale
           </a>
         </p>
+        
+        {/* Link discreto all'area riservata */}
+        <Link
+          href="/admin-100p"
+          className="flex items-center gap-1 text-[11px] text-muted-text/40 hover:text-accent/80 transition-colors duration-300 mt-2"
+          aria-label="Accesso Area Riservata"
+        >
+          <Lock size={11} />
+          <span>Area Riservata</span>
+        </Link>
       </div>
     </footer>
   );
 }
+
