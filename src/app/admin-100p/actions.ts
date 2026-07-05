@@ -18,28 +18,32 @@ async function requireAdmin() {
 }
 
 export async function verifyPin(pin: string) {
-  const envPin = process.env.ADMIN_PIN;
-  
-  let correctPin = "100Porte!";
-  if (envPin && envPin !== "undefined" && envPin !== "null" && envPin.trim() !== "") {
-    correctPin = envPin.trim();
-  }
+  try {
+    const envPin = process.env.ADMIN_PIN;
+    
+    let correctPin = "100Porte!";
+    if (envPin && envPin !== "undefined" && envPin !== "null" && envPin.trim() !== "") {
+      correctPin = envPin.trim();
+    }
 
-  const cleanPin = pin.trim();
-  // Accetta sia il PIN configurato (o fallback 100Porte!), sia la password secondaria "1234"
-  if (cleanPin === correctPin || cleanPin === "100Porte!" || cleanPin === "1234") {
-
-    const cookieStore = await cookies();
-    cookieStore.set("admin_auth", "true", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24, // 1 giorno
-      path: "/",
-    });
-    return { success: true };
+    const cleanPin = pin.trim();
+    if (cleanPin === correctPin || cleanPin === "100Porte!" || cleanPin === "1234") {
+      const cookieStore = await cookies();
+      cookieStore.set("admin_auth", "true", {
+        httpOnly: true,
+        secure: true,
+        maxAge: 60 * 60 * 24, // 1 giorno
+        path: "/",
+      });
+      return { success: true };
+    }
+    return { success: false, error: "PIN Errato" };
+  } catch (err: any) {
+    console.error('[verifyPin] Server crash:', err);
+    return { success: false, error: `Errore server: ${err.message || String(err)}` };
   }
-  return { success: false };
 }
+
 
 
 
