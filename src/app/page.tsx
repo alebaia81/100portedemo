@@ -305,13 +305,13 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="font-bold uppercase tracking-widest text-xs text-muted-text mb-1">Prenotazioni</p>
-                    <p className="text-foreground text-lg">+39 333 123 4567</p>
+                    <p className="text-foreground text-lg">+39 339 815 6719</p>
                   </div>
                 </div>
               </div>
 
               <div className="pt-4">
-                <a href="tel:+393331234567" className="btn-amber-glow inline-block px-10 py-4 text-lg">
+                <a href="tel:+393398156719" className="btn-amber-glow inline-block px-10 py-4 text-lg">
                   Prenota un tavolo
                 </a>
               </div>
@@ -352,9 +352,10 @@ export default function Home() {
       {/* Sticky Bottom CTA - solo mobile */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-background/95 backdrop-blur border-t border-border p-4 flex gap-3">
         <a 
-          href="tel:+393331234567"
+          href="tel:+393398156719"
           className="flex-1 flex items-center justify-center gap-2 py-3 border border-border rounded-lg font-bold text-sm hover:border-accent transition-colors"
         >
+
           <Phone size={16} /> Chiama
         </a>
         <Link 

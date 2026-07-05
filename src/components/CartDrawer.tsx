@@ -75,7 +75,7 @@ export default function CartDrawer() {
     }
     
     const link = generateWhatsAppLink(
-      process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "3331234567", 
+      process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "3398156719", 
       items, 
       total, 
       customerName, 

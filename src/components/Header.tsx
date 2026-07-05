@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
+import { useState, useEffect } from "react";
 
-import { Phone } from "lucide-react";
+import Link from "next/link";
+import { Phone, Sun, Moon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const InstagramIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
@@ -23,8 +24,31 @@ const InstagramIcon = ({ size = 24, className = "" }: { size?: number, className
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
   </svg>
 );
+
 export default function Header() {
   const pathname = usePathname();
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  useEffect(() => {
+    const activeTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(activeTheme as any);
+    if (activeTheme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    localStorage.setItem('theme', nextTheme);
+    if (nextTheme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     if (pathname === "/") {
@@ -34,14 +58,14 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border">
+    <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border transition-colors duration-300">
       <div className="container mx-auto px-6 h-20 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2" onClick={handleLogoClick}>
           <div className="flex flex-col text-left drop-shadow-[0_0_8px_rgba(200,135,58,0.4)]">
             <span className="text-2xl md:text-3xl font-serif font-black tracking-wider text-accent uppercase leading-none">
               Burger
             </span>
-            <span className="text-xs md:text-sm font-sans font-bold tracking-[0.25em] text-white uppercase leading-none mt-1">
+            <span className="text-xs md:text-sm font-sans font-bold tracking-[0.25em] text-foreground uppercase leading-none mt-1">
               Lab
             </span>
           </div>
@@ -61,8 +85,18 @@ export default function Header() {
           >
             Ordina Ora
           </Link>
+          
+          {/* Pulsante cambio tema globale */}
+          <button 
+            onClick={toggleTheme}
+            className="p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-all duration-300"
+            aria-label="Cambia tema chiaro/scuro"
+          >
+            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+
           <a 
-            href="tel:+393331234567" 
+            href="tel:+393398156719" 
             className="p-2 bg-surface border border-border rounded-full text-accent hover:scale-110 transition-transform"
           >
             <Phone size={18} />
@@ -79,3 +113,4 @@ export default function Header() {
     </header>
   );
 }
+
