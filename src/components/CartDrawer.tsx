@@ -34,7 +34,7 @@ export default function CartDrawer() {
   const [cashAmount, setCashAmount] = useState('');
   const [gdprAccepted, setGdprAccepted] = useState(false);
 
-  const handleOrder = () => {
+  const handleOrder = async () => {
     if (!customerName || !pickupTime) {
       alert("Per favore, inserisci il tuo nome e l'orario.");
       return;
@@ -46,6 +46,32 @@ export default function CartDrawer() {
     if (!gdprAccepted) {
       alert("Devi accettare il trattamento dei dati per procedere con l'ordine.");
       return;
+    }
+
+    // Invio asincrono dell'ordine al database
+    try {
+      await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer_name: customerName,
+          order_type: orderType,
+          address: orderType === 'domicilio' ? address : null,
+          pickup_time: pickupTime,
+          payment_method: paymentMethod,
+          cash_amount: paymentMethod === 'contanti' ? cashAmount : null,
+          total: total,
+          items: items.map(item => ({
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+          }))
+        })
+      });
+    } catch (e) {
+      console.warn('[CartDrawer] Impossibile salvare l\'ordine su DB:', e);
+      // Continuiamo comunque con l'invio tramite WhatsApp per non bloccare l'acquisto
     }
     
     const link = generateWhatsAppLink(
@@ -69,6 +95,7 @@ export default function CartDrawer() {
     setOrderType('ritiro');
     setIsOpen(false);
   };
+
 
   if (!mounted || itemCount === 0) return null;
 
