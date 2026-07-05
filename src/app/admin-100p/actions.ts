@@ -18,8 +18,15 @@ async function requireAdmin() {
 }
 
 export async function verifyPin(pin: string) {
-  const correctPin = process.env.ADMIN_PIN || "1234";
-  if (pin === correctPin) {
+  const envPin = process.env.ADMIN_PIN;
+  
+  let correctPin = "1234";
+  if (envPin && envPin !== "undefined" && envPin !== "null" && envPin.trim() !== "") {
+    correctPin = envPin.trim();
+  }
+
+  // Confronto con rimozione di eventuali spazi inseriti per errore
+  if (pin.trim() === correctPin) {
     const cookieStore = await cookies();
     cookieStore.set("admin_auth", "true", {
       httpOnly: true,
@@ -31,6 +38,7 @@ export async function verifyPin(pin: string) {
   }
   return { success: false };
 }
+
 
 
 export async function toggleProductAvailability(id_piatto: string, is_available: boolean) {
