@@ -1,0 +1,47 @@
+
+> cento-porte-web@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.101:3000
+- Environments: .env.local
+✓ Ready in 289ms
+
+ GET / 200 in 340ms (next.js: 131ms, application-code: 209ms)
+✓ Compiled in 502ms
+ GET / 200 in 199ms (next.js: 46ms, application-code: 153ms)
+ GET / 200 in 146ms (next.js: 3ms, application-code: 143ms)
+ GET / 200 in 128ms (next.js: 2ms, application-code: 126ms)
+ GET / 200 in 110ms (next.js: 4ms, application-code: 106ms)
+ GET / 200 in 124ms (next.js: 1303µs, application-code: 123ms)
+ GET / 200 in 107ms (next.js: 1609µs, application-code: 105ms)
+ GET / 200 in 108ms (next.js: 2ms, application-code: 106ms)
+ GET / 200 in 85ms (next.js: 1367µs, application-code: 84ms)
+ GET / 200 in 69ms (next.js: 1851µs, application-code: 67ms)
+ GET / 200 in 49ms (next.js: 1315µs, application-code: 48ms)
+ GET / 200 in 33ms (next.js: 2ms, application-code: 30ms)
+ GET / 200 in 20ms (next.js: 2ms, application-code: 18ms)
+ GET / 200 in 29ms (next.js: 2ms, application-code: 27ms)
+ GET / 200 in 24ms (next.js: 2ms, application-code: 21ms)
+ GET / 200 in 22ms (next.js: 12ms, application-code: 11ms)
+ GET /menu 200 in 56ms (next.js: 43ms, application-code: 13ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior (file:///Volumes/Magazzino/Magazzino/progetti web/100 porte/.next/dev/static/chunks/node_modules_next_dist_115brz8._.js:2477:13)
+✓ Compiled in 65ms
+✓ Compiled in 27ms
+ GET /menu 200 in 39ms (next.js: 4ms, application-code: 36ms)
+ GET /menu 200 in 18ms (next.js: 3ms, application-code: 15ms)
+✓ Compiled in 39ms
+ GET / 200 in 307ms (next.js: 36ms, application-code: 271ms)
+✓ Compiled in 141ms
+✓ Compiled in 35ms
+✓ Compiled in 106ms
+ GET /menu 200 in 64ms (next.js: 10ms, application-code: 55ms)
+ GET / 200 in 62ms (next.js: 40ms, application-code: 22ms)
+ GET /menu 200 in 141ms (next.js: 13ms, application-code: 128ms)
+ GET / 200 in 56ms (next.js: 14ms, application-code: 42ms)
+✓ Compiled in 345ms
+ GET /menu 200 in 52ms (next.js: 35ms, application-code: 17ms)
+ GET / 200 in 59ms (next.js: 6ms, application-code: 52ms)
+✓ Compiled in 88ms
+[?25h
