@@ -5,7 +5,6 @@ import { verifyPin, toggleProductAvailability, toggleCategoryAvailability, updat
 import { MENU_DATA } from "@/lib/menu-data";
 import ScrollToTop from "@/components/ScrollToTop";
 
-
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pin, setPin] = useState("");
@@ -15,56 +14,15 @@ export default function AdminPage() {
   const [prices, setPrices] = useState<Record<string, number | null>>({});
   const [editingPrice, setEditingPrice] = useState<Record<string, string>>({});
   const [loadingCategory, setLoadingCategory] = useState<string | null>(null);
-  
-  // State for active category filtering
-  const [activeCategory, setActiveCategory] = useState<string>("");
-  const [transitioning, setTransitioning] = useState(false);
-  const [displayCategory, setDisplayCategory] = useState<string>("");
+  const [activeSection, setActiveSection] = useState<string>("");
 
-  // Unique sorted list of categories
   const categories = Array.from(new Set(MENU_DATA.map(item => item.category)));
 
-  // Sync hash in URL with active category
-  useEffect(() => {
-    if (categories.length > 0) {
-      const defaultCategory = categories[0];
-      const handleHashChange = () => {
-        const hash = window.location.hash.replace("#cat-", "");
-        const decodedHash = decodeURIComponent(hash);
-        if (categories.includes(decodedHash)) {
-          setActiveCategory(decodedHash);
-        } else {
-          setActiveCategory(defaultCategory);
-        }
-      };
-
-      handleHashChange();
-      window.addEventListener("hashchange", handleHashChange);
-      return () => window.removeEventListener("hashchange", handleHashChange);
-    }
-  }, []);
-
-  // Handle activeCategory changes with smooth transitions
-  useEffect(() => {
-    if (activeCategory) {
-      if (!displayCategory) {
-        setDisplayCategory(activeCategory);
-      } else {
-        setTransitioning(true);
-        const timer = setTimeout(() => {
-          setDisplayCategory(activeCategory);
-          setTransitioning(false);
-        }, 150);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [activeCategory]);
-
+  // Fetch dei dati iniziali da Supabase tramite API route server-side
   useEffect(() => {
     if (isAuthenticated) {
       const fetchState = async () => {
         try {
-          // Usa l'API route server-side (le env vars funzionano nel Worker Cloudflare)
           const res = await fetch('/api/availability', { cache: 'no-store' });
           if (!res.ok) return;
           const data = await res.json();
@@ -78,6 +36,35 @@ export default function AdminPage() {
     }
   }, [isAuthenticated]);
 
+  // ScrollSpy per evidenziare la categoria corrente sulla sidebar durante lo scrolling
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const options = {
+      root: null,
+      rootMargin: "-20% 0px -60% 0px", // Rileva quando la sezione è nella parte medio-alta
+      threshold: 0,
+    };
+
+    const callback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id.replace("cat-", ""));
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+
+    categories.forEach((cat) => {
+      const el = document.getElementById(`cat-${encodeURIComponent(cat)}`);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isAuthenticated, categories]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,7 +77,7 @@ export default function AdminPage() {
     }
   };
 
-  // Toggle single product
+  // Toggle singola disponibilità
   const toggleAvailability = async (id_piatto: string) => {
     const currentState = availability[id_piatto] !== false;
     const newState = !currentState;
@@ -102,23 +89,19 @@ export default function AdminPage() {
     }
   };
 
-  // Toggle entire category
+  // Toggle intera categoria
   const toggleCategory = async (category: string) => {
     const categoryItems = MENU_DATA.filter(item => item.category === category);
     const ids = categoryItems.map(item => item.id);
-    
-    // Check if at least one product in category is active
     const anyActive = ids.some(id => availability[id] !== false);
     const newState = !anyActive;
-    
+
     setLoadingCategory(category);
-    
-    // Optimistic update
     const prevAvail = { ...availability };
     const newAvail = { ...availability };
     ids.forEach(id => { newAvail[id] = newState; });
     setAvailability(newAvail);
-    
+
     const result = await toggleCategoryAvailability(ids, newState);
     if (!result.success) {
       alert(`Errore: ${result.error}`);
@@ -127,13 +110,13 @@ export default function AdminPage() {
     setLoadingCategory(null);
   };
 
-  // Update price on blur
+  // Aggiornamento prezzo personalizzato al blur dell'input
   const handlePriceBlur = async (id_piatto: string, originalPrice: number) => {
     const inputVal = editingPrice[id_piatto];
     if (inputVal === undefined) return;
-    
+
     const newPrice = inputVal === '' ? null : parseFloat(inputVal);
-    
+
     if (newPrice !== null && isNaN(newPrice)) {
       setEditingPrice(prev => {
         const next = { ...prev };
@@ -149,22 +132,39 @@ export default function AdminPage() {
       delete next[id_piatto];
       return next;
     });
-    
+
     const result = await updateProductPrice(id_piatto, newPrice);
     if (!result.success) {
       alert(`Errore aggiornamento prezzo: ${result.error}`);
     }
   };
 
-  // Check if entire category is active
+  // Rileva se tutta la categoria è attiva
   const isCategoryActive = (category: string) => {
     const items = MENU_DATA.filter(item => item.category === category);
     return items.every(item => availability[item.id] !== false);
   };
 
-  const handleCategorySelect = (category: string) => {
-    window.location.hash = `cat-${category}`;
+  // Scroll morbido alla sezione cliccata
+  const scrollToCategory = (category: string) => {
+    const el = document.getElementById(`cat-${encodeURIComponent(category)}`);
+    if (el) {
+      const headerOffset = 90;
+      const elementPosition = el.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      setActiveSection(category);
+    }
   };
+
+  // Statistiche generali del menù
+  const totalProducts = MENU_DATA.length;
+  const activeProducts = MENU_DATA.filter(item => availability[item.id] !== false).length;
+  const disabledProducts = totalProducts - activeProducts;
+  const customizedPrices = Object.values(prices).filter(p => p !== null).length;
 
   if (!isAuthenticated) {
     return (
@@ -199,34 +199,59 @@ export default function AdminPage() {
     );
   }
 
-  const activeCategoryItems = MENU_DATA.filter(item => item.category === displayCategory);
-  const catActive = isCategoryActive(displayCategory);
-  const isLoading = loadingCategory === displayCategory;
-
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        
-        {/* Header */}
-        <div className="flex justify-between items-center border-b border-border pb-6">
+    <div className="min-h-screen bg-background text-foreground">
+      {/* Top Navbar */}
+      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border py-4 px-6 shadow-md">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-serif text-accent">Gestione Menù</h1>
-            <p className="text-sm text-muted-text mt-1">Disponibilità e Prezzi in tempo reale</p>
+            <h1 className="text-2xl md:text-3xl font-serif text-accent leading-none">Dashboard Menù</h1>
+            <p className="text-xs text-muted-text mt-1 hidden sm:block">Gestisci disponibilità e variazioni di prezzo dei piatti</p>
           </div>
-          <button onClick={() => setIsAuthenticated(false)} className="text-sm text-muted-text hover:text-foreground border border-border px-4 py-2 rounded-lg hover:border-accent transition-colors">Esci</button>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setIsAuthenticated(false)} 
+              className="text-xs text-muted-text hover:text-foreground border border-border px-4 py-2 rounded-lg hover:border-accent transition-colors"
+            >
+              Esci
+            </button>
+          </div>
         </div>
+      </header>
 
-        {/* Mobile Sticky Selector */}
-        <div className="md:hidden sticky top-[0px] z-40 bg-background/95 backdrop-blur border-b border-border py-3 -mx-4 px-4">
+      <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
+        
+        {/* Stats Grid */}
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="glass-card p-4 flex flex-col justify-between">
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-text">Piatti Totali</span>
+            <span className="text-3xl font-bold mt-2 text-foreground">{totalProducts}</span>
+          </div>
+          <div className="glass-card p-4 flex flex-col justify-between">
+            <span className="text-xs font-bold uppercase tracking-widest text-green-500">Disponibili</span>
+            <span className="text-3xl font-bold mt-2 text-green-400">{activeProducts}</span>
+          </div>
+          <div className="glass-card p-4 flex flex-col justify-between">
+            <span className="text-xs font-bold uppercase tracking-widest text-red-500">Esauriti</span>
+            <span className="text-3xl font-bold mt-2 text-red-400">{disabledProducts}</span>
+          </div>
+          <div className="glass-card p-4 flex flex-col justify-between">
+            <span className="text-xs font-bold uppercase tracking-widest text-accent">Prezzi Personalizzati</span>
+            <span className="text-3xl font-bold mt-2 text-accent">{customizedPrices}</span>
+          </div>
+        </section>
+
+        {/* Mobile Sticky Section Menu Dropdown */}
+        <div className="md:hidden sticky top-[72px] z-40 bg-background/95 backdrop-blur border-b border-border py-3 -mx-4 px-4 shadow-sm">
           <div className="relative">
             <select
-              value={activeCategory}
-              onChange={(e) => handleCategorySelect(e.target.value)}
+              value={activeSection}
+              onChange={(e) => scrollToCategory(e.target.value)}
               className="w-full bg-surface border border-border text-foreground rounded-lg py-3 px-4 pr-10 text-sm font-bold uppercase tracking-wider appearance-none focus:border-accent outline-none"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat}
+                  {cat} ({MENU_DATA.filter(item => item.category === cat).length})
                 </option>
               ))}
             </select>
@@ -236,45 +261,61 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Grid Layout (Sidebar on Desktop, Content on Right) */}
+        {/* Grid Layout (Sidebar Navigation & Scrollable content) */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
-          {/* Sidebar Navigation - Desktop */}
+          {/* Left Sidebar Menu Nav - Desktop Sticky */}
           <aside className="hidden md:block col-span-1">
-            <div className="sticky top-8 space-y-1 bg-surface/10 p-4 rounded-xl border border-border/30">
-              <p className="text-[10px] font-bold tracking-widest uppercase text-muted-text px-3 mb-3">Categorie</p>
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => handleCategorySelect(cat)}
-                  className={`w-full text-left px-3.5 py-3 rounded-lg text-xs font-bold uppercase tracking-wider transition-all border ${
-                    activeCategory === cat
-                      ? "text-accent bg-accent/5 border-l-4 border-l-accent border-y-transparent border-r-transparent pl-3"
-                      : "text-muted-text hover:text-accent border-transparent hover:bg-surface/30"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+            <div className="sticky top-24 space-y-1 bg-surface/20 p-4 rounded-xl border border-border/30 shadow-sm max-h-[calc(100vh-120px)] overflow-y-auto">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-muted-text px-3 mb-3">Sezioni</p>
+              <nav className="flex flex-col gap-1">
+                {categories.map((cat) => {
+                  const isActive = activeSection === cat;
+                  const catItems = MENU_DATA.filter(item => item.category === cat);
+                  const activeCount = catItems.filter(item => availability[item.id] !== false).length;
+                  
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => scrollToCategory(cat)}
+                      className={`w-full text-left px-3 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-between border ${
+                        isActive
+                          ? "text-accent bg-accent/5 border-accent/20 font-extrabold shadow-sm"
+                          : "text-muted-text hover:text-accent border-transparent hover:bg-surface/30"
+                      }`}
+                    >
+                      <span className="truncate pr-1">{cat}</span>
+                      <span className="text-[10px] opacity-70 bg-surface/50 border border-border/40 px-1.5 py-0.5 rounded font-mono">
+                        {activeCount}/{catItems.length}
+                      </span>
+                    </button>
+                  );
+                })}
+              </nav>
             </div>
           </aside>
 
-          {/* Active Category Editor Section */}
-          <main className="col-span-1 md:col-span-3">
-            <div className={`transition-all duration-150 transform ${
-              transitioning ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
-            }`}>
-              {displayCategory && (
-                <section className="glass-card p-4 md:p-6">
-                  
-                  {/* Category Header with Toggle All Switch */}
-                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-border">
+          {/* Right Main Panel with All Sections */}
+          <main className="col-span-1 md:col-span-3 space-y-12">
+            {categories.map((category) => {
+              const categoryItems = MENU_DATA.filter(item => item.category === category);
+              const catActive = isCategoryActive(category);
+              const isLoading = loadingCategory === category;
+
+              return (
+                <section 
+                  key={category} 
+                  id={`cat-${encodeURIComponent(category)}`}
+                  className="glass-card p-6 md:p-8 scroll-mt-24"
+                >
+                  {/* Section Title & Header Actions */}
+                  <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-border/40">
                     <div>
-                      <h2 className="text-xl md:text-2xl font-serif text-accent">{displayCategory}</h2>
-                      <p className="text-xs text-muted-text mt-1">{activeCategoryItems.length} prodotti</p>
+                      <h2 className="text-2xl font-serif text-accent">{category}</h2>
+                      <p className="text-xs text-muted-text mt-1">{categoryItems.length} piatti totali in questa sezione</p>
                     </div>
                     <button 
-                      onClick={() => toggleCategory(displayCategory)}
+                      onClick={() => toggleCategory(category)}
                       disabled={isLoading}
                       className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all border ${
                         catActive 
@@ -282,34 +323,42 @@ export default function AdminPage() {
                           : 'bg-green-500/10 text-green-400 border-green-500/30 hover:bg-green-500/20'
                       } ${isLoading ? 'opacity-50 cursor-wait' : ''}`}
                     >
-                      {isLoading ? '...' : catActive ? '✕ Disattiva Tutti' : '✓ Attiva Tutti'}
+                      {isLoading ? '...' : catActive ? '✕ Spegni Sezione' : '✓ Attiva Sezione'}
                     </button>
                   </div>
 
-                  {/* List of Products in Selected Category */}
-                  <div className="space-y-3">
-                    {activeCategoryItems.map((item) => {
+                  {/* Grid of Product Cards */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {categoryItems.map((item) => {
                       const isAvailable = availability[item.id] !== false;
                       const overriddenPrice = prices[item.id];
                       const displayPrice = overriddenPrice !== null && overriddenPrice !== undefined ? overriddenPrice : item.price;
                       const isEditing = editingPrice[item.id] !== undefined;
-                      
+
                       return (
-                        <div key={item.id} className={`flex flex-col sm:flex-row justify-between sm:items-center gap-3 p-4 rounded-lg border transition-all ${
-                          isAvailable 
-                            ? 'border-border hover:border-accent/30 bg-surface/30 shadow-sm' 
-                            : 'border-border/30 bg-surface/5 opacity-60'
-                        }`}>
-                          
-                          {/* Info Product */}
-                          <div className="flex-1 min-w-0 pr-2">
-                            <h3 className="font-bold text-sm md:text-base leading-snug">{item.name}</h3>
-                            <p className="text-xs text-muted-text mt-1 line-clamp-2 leading-relaxed">{item.description}</p>
+                        <div 
+                          key={item.id} 
+                          className={`flex flex-col justify-between p-4 rounded-xl border transition-all ${
+                            isAvailable 
+                              ? 'border-border/60 hover:border-accent/40 bg-surface/30 shadow-sm' 
+                              : 'border-border/30 bg-surface/5 opacity-50'
+                          }`}
+                        >
+                          {/* Info area */}
+                          <div className="mb-4">
+                            <div className="flex justify-between items-start gap-2">
+                              <h3 className="font-bold text-sm md:text-base leading-tight text-foreground">{item.name}</h3>
+                              {!isAvailable && (
+                                <span className="bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full shrink-0">
+                                  Spento
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-muted-text mt-1.5 line-clamp-2 leading-relaxed">{item.description}</p>
                           </div>
-                          
-                          {/* Editor Controls */}
-                          <div className="flex items-center justify-between sm:justify-start gap-4 flex-shrink-0 border-t border-border/30 pt-3 sm:pt-0 sm:border-none">
-                            
+
+                          {/* Control actions */}
+                          <div className="flex items-center justify-between border-t border-border/20 pt-3 mt-auto">
                             {/* Price Field */}
                             <div className="flex items-center gap-1.5">
                               <span className="text-xs text-muted-text font-mono">€</span>
@@ -321,39 +370,49 @@ export default function AdminPage() {
                                 onChange={(e) => setEditingPrice(prev => ({ ...prev, [item.id]: e.target.value }))}
                                 onBlur={() => handlePriceBlur(item.id, item.price)}
                                 onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
-                                className={`w-20 bg-background border rounded px-2 py-1 text-sm text-right font-mono focus:border-accent outline-none ${
+                                className={`w-20 bg-background border rounded px-2.5 py-1 text-sm text-right font-mono focus:border-accent outline-none ${
                                   overriddenPrice !== null && overriddenPrice !== undefined && overriddenPrice !== item.price
-                                    ? 'border-accent/50 text-accent font-bold' 
-                                    : 'border-border'
+                                    ? 'border-accent/60 text-accent font-bold bg-accent/5' 
+                                    : 'border-border/80'
                                 }`}
                               />
+                              {overriddenPrice !== null && overriddenPrice !== undefined && (
+                                <button
+                                  onClick={async () => {
+                                    setPrices(prev => ({ ...prev, [item.id]: null }));
+                                    await updateProductPrice(item.id, null);
+                                  }}
+                                  className="text-[10px] text-red-400 hover:text-red-300 font-bold uppercase font-sans"
+                                  title="Ripristina prezzo originale"
+                                >
+                                  Reset
+                                </button>
+                              )}
                             </div>
 
-                            {/* Status State Label */}
-                            <span className={`text-xs font-bold uppercase w-16 text-center ${isAvailable ? 'text-green-500' : 'text-red-500'}`}>
-                              {isAvailable ? 'Attivo' : 'Spento'}
-                            </span>
-                            
-                            {/* Custom Switch Toggle */}
-                            <label className="relative inline-flex items-center cursor-pointer flex-shrink-0">
-                              <input 
-                                type="checkbox" 
-                                className="sr-only peer"
-                                checked={isAvailable}
-                                onChange={() => toggleAvailability(item.id)}
-                              />
-                              <div className="w-11 h-6 bg-surface peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent border border-border"></div>
-                            </label>
+                            {/* Active Switch */}
+                            <div className="flex items-center gap-3">
+                              <span className={`text-[10px] font-bold uppercase ${isAvailable ? 'text-green-500' : 'text-red-500'}`}>
+                                {isAvailable ? 'Attivo' : 'Spento'}
+                              </span>
+                              <label className="relative inline-flex items-center cursor-pointer">
+                                <input 
+                                  type="checkbox" 
+                                  className="sr-only peer"
+                                  checked={isAvailable}
+                                  onChange={() => toggleAvailability(item.id)}
+                                />
+                                <div className="w-10 h-5 bg-surface peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent border border-border"></div>
+                              </label>
+                            </div>
                           </div>
-
                         </div>
                       );
                     })}
                   </div>
-
                 </section>
-              )}
-            </div>
+              );
+            })}
           </main>
 
         </div>

@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+export const runtime = 'edge';
+
+
 /**
  * GET /api/availability
  * Legge la disponibilità e i prezzi da Supabase lato server.
