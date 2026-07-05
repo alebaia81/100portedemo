@@ -5,6 +5,17 @@ import { verifyPin, toggleProductAvailability, toggleCategoryAvailability, updat
 import { MENU_DATA } from "@/lib/menu-data";
 import ScrollToTop from "@/components/ScrollToTop";
 
+const lightThemeStyles = {
+  '--color-background': '#fbf9f4',     // crema morbido chiarissimo
+  '--color-foreground': '#1c1917',     // nero antracite
+  '--color-surface': '#ffffff',        // bianco puro per le schede
+  '--color-border': '#e7e3da',         // bordo grigio-caldo leggero
+  '--color-muted-text': '#6f695e',     // testo disattivato marroncino-grigio
+  '--background': '#fbf9f4',
+  '--foreground': '#1c1917',
+} as React.CSSProperties;
+
+
 interface OrderItem {
   id: string;
   name: string;
@@ -35,9 +46,13 @@ export default function AdminDashboardClient() {
   // Tab attiva della dashboard: 'orders' o 'menu'
   const [activeTab, setActiveTab] = useState<'orders' | 'menu'>('orders');
 
+  // Tema della dashboard: 'dark' (default) o 'light'
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
   // Stati del Menù
   const [availability, setAvailability] = useState<Record<string, boolean>>({});
   const [prices, setPrices] = useState<Record<string, number | null>>({});
+
   const [editingPrice, setEditingPrice] = useState<Record<string, string>>({});
   const [loadingCategory, setLoadingCategory] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string>("");
@@ -325,7 +340,24 @@ export default function AdminDashboardClient() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
+      <div 
+        className="min-h-screen flex items-center justify-center bg-background text-foreground transition-all duration-300 relative"
+        style={theme === 'light' ? lightThemeStyles : undefined}
+      >
+        {/* Pulsante Tema in alto a destra sulla pagina di Login */}
+        <div className="absolute top-6 right-6">
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="p-2.5 rounded-lg border border-border text-muted-text hover:text-foreground hover:border-accent transition-colors bg-surface/50 shadow-sm"
+            title={theme === 'light' ? 'Tema Scuro' : 'Tema Chiaro'}
+          >
+            {theme === 'light' ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/></svg>
+            )}
+          </button>
+        </div>
         <form onSubmit={handleLogin} className="glass-card p-8 space-y-6 w-full max-w-sm">
           <h1 className="text-2xl font-serif text-accent text-center">Area Riservata</h1>
           {error && <p className="text-red-500 text-center text-sm">{error}</p>}
@@ -335,7 +367,7 @@ export default function AdminDashboardClient() {
               placeholder="Inserisci PIN"
               value={pin}
               onChange={(e) => setPin(e.target.value)}
-              className="w-full bg-surface border border-border rounded-lg p-3 text-center text-xl tracking-widest focus:border-accent outline-none pr-12"
+              className="w-full bg-surface border border-border rounded-lg p-3 text-center text-xl tracking-widest focus:border-accent outline-none pr-12 text-foreground"
             />
             <button
               type="button"
@@ -356,8 +388,12 @@ export default function AdminDashboardClient() {
     );
   }
 
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div 
+      className="min-h-screen bg-background text-foreground transition-all duration-300"
+      style={theme === 'light' ? lightThemeStyles : undefined}
+    >
       {/* Top Header Navbar */}
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border py-4 px-6 shadow-md">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -380,6 +416,18 @@ export default function AdminDashboardClient() {
                 Menù
               </button>
             </nav>
+            {/* Pulsante cambio tema */}
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="p-2 rounded-lg border border-border text-muted-text hover:text-foreground hover:border-accent transition-colors"
+              title={theme === 'light' ? 'Attiva Tema Scuro' : 'Attiva Tema Chiaro'}
+            >
+              {theme === 'light' ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/></svg>
+              )}
+            </button>
             <button 
               onClick={() => setIsAuthenticated(false)} 
               className="text-xs text-muted-text hover:text-foreground border border-border px-4 py-2 rounded-lg hover:border-accent transition-colors"
@@ -389,6 +437,7 @@ export default function AdminDashboardClient() {
           </div>
         </div>
       </header>
+
 
       <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-8 animate-fade-in">
         
