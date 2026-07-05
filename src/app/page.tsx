@@ -11,7 +11,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=2071&auto=format&fit=crop')] bg-cover bg-center">
-          <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]" />
+          <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px]" />
         </div>
         
         <div className="relative z-10 container mx-auto px-6 text-center">
