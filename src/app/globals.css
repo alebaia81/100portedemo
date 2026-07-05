@@ -33,6 +33,7 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   h1, h2, h3, h4 {
@@ -41,20 +42,31 @@
   }
 }
 
+/* Regole per il Tema Chiaro Globale con Specificità Elevata ed !important */
+:root.light, html.light, .light {
+  --color-background: #fbf9f4 !important;
+  --color-foreground: #1c1917 !important;
+  --color-surface: #ffffff !important;
+  --color-border: #e7e3da !important;
+  --color-muted-text: #6f695e !important;
+  --background: #fbf9f4 !important;
+  --foreground: #1c1917 !important;
+}
+
 @layer components {
   .btn-primary {
-    @apply bg-accent text-background font-bold py-3 px-6 rounded-lg transition-all hover:bg-accent-hover active:scale-95;
+    @apply bg-accent text-[#0f0d0a] font-bold py-3 px-6 rounded-lg transition-all hover:bg-accent-hover active:scale-95;
   }
   
   .btn-amber-glow {
-    @apply bg-transparent border border-[#c8873a] text-[#e8b86d] font-bold py-3 px-6 rounded-lg transition-all shadow-[0_0_15px_rgba(200,135,58,0.3)] hover:shadow-[0_0_25px_rgba(200,135,58,0.6)] hover:bg-[#c8873a] hover:text-[#0f0d0a] active:scale-95;
+    @apply bg-transparent border border-[#c8873a] text-[#c8873a] hover:text-[#0f0d0a] font-bold py-3 px-6 rounded-lg transition-all hover:bg-[#c8873a] active:scale-95;
   }
   
   .btn-logo-blue {
-    @apply bg-accent border-2 border-accent text-background font-bold py-3 px-6 rounded-lg transition-all hover:bg-accent-hover active:scale-95;
+    @apply bg-accent border-2 border-accent text-[#0f0d0a] font-bold py-3 px-6 rounded-lg transition-all hover:bg-accent-hover active:scale-95;
   }
   
   .glass-card {
-    @apply bg-surface border border-border rounded-xl shadow-xl backdrop-blur-sm;
+    @apply bg-surface border border-border rounded-xl shadow-xl backdrop-blur-sm transition-all duration-300;
   }
 }

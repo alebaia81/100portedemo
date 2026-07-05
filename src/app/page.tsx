@@ -15,11 +15,11 @@ export default function Home() {
         </div>
         
         <div className="relative z-10 container mx-auto px-6 text-center">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6 tracking-tighter">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6 tracking-tighter text-white">
             L&apos;Hamburgeria <br />
             <span className="text-white italic font-serif">Gourmet</span>
           </h1>
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-text mb-10 leading-relaxed">
+          <p className="max-w-2xl mx-auto text-lg md:text-xl text-stone-300 mb-10 leading-relaxed">
             Carni selezionate, birre artigianali e l&apos;atmosfera autentica di un pub che ha fatto la storia locale.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
