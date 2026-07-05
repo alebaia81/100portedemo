@@ -13,6 +13,13 @@ function getSupabaseClient(): SupabaseClient {
 
 export const supabase = new Proxy({} as SupabaseClient, {
   get(_target, prop) {
-    return (getSupabaseClient() as unknown as Record<string | symbol, unknown>)[prop];
+    const client = getSupabaseClient();
+    const value = (client as unknown as Record<string | symbol, unknown>)[prop];
+    // Lega i metodi al client reale per evitare perdita del contesto 'this'
+    if (typeof value === 'function') {
+      return (value as Function).bind(client);
+    }
+    return value;
   },
 });
+
