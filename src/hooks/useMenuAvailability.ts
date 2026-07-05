@@ -1,97 +1,57 @@
-import { useState, useEffect } from 'react';
-import { getSupabase } from '@/lib/supabase';
+import { useState, useEffect, useRef } from 'react';
 
 interface MenuState {
   availability: Record<string, boolean>;
   prices: Record<string, number>;
 }
 
+/**
+ * Hook che carica e aggiorna disponibilità e prezzi dal server (API route).
+ * Usa il server Cloudflare Worker per leggere da Supabase, eliminando la
+ * dipendenza dalle variabili NEXT_PUBLIC_* nel bundle client.
+ * Esegue un refetch ogni 10 secondi per riflettere modifiche dall'admin.
+ */
 export function useMenuAvailability(): MenuState {
   const [state, setState] = useState<MenuState>({
     availability: {},
     prices: {},
   });
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const fetchAvailability = async () => {
+    try {
+      const res = await fetch('/api/availability', { cache: 'no-store' });
+      if (!res.ok) return;
+      const data = await res.json();
+      setState({
+        availability: data.availability ?? {},
+        prices: data.prices ?? {},
+      });
+    } catch (e) {
+      console.warn('[useMenuAvailability] Failed to fetch availability:', e);
+    }
+  };
 
   useEffect(() => {
-    const client = getSupabase();
+    // Carica subito al mount
+    fetchAvailability();
 
-    // Se Supabase non è configurato, il menu mostra tutto disponibile (offline mode)
-    if (!client) {
-      console.warn('[useMenuAvailability] Supabase not available — showing all items as available');
-      return;
-    }
+    // Polling ogni 10 secondi per aggiornamenti live dall'admin
+    intervalRef.current = setInterval(fetchAvailability, 10_000);
 
-    // 1. Carica lo stato iniziale della disponibilità e prezzi da Supabase
-    const fetchState = async () => {
-      try {
-        const { data, error } = await client
-          .from('disponibilita_piatti')
-          .select('id_piatto, is_available, price');
-
-        if (!error && data) {
-          const availability: Record<string, boolean> = {};
-          const prices: Record<string, number> = {};
-          data.forEach((item) => {
-            availability[item.id_piatto] = item.is_available;
-            if (item.price !== null && item.price !== undefined) {
-              prices[item.id_piatto] = Number(item.price);
-            }
-          });
-          setState({ availability, prices });
-        }
-      } catch (e) {
-        console.error('[useMenuAvailability] Failed to fetch state:', e);
+    // Refetch quando la tab torna in focus
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchAvailability();
       }
     };
-
-    fetchState();
-
-    // 2. Sottoscrizione ai cambiamenti in tempo reale (Supabase Real-Time)
-    let channel: ReturnType<typeof client.channel> | null = null;
-    try {
-      channel = client
-        .channel('schema-db-changes')
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'disponibilita_piatti',
-          },
-          (payload) => {
-            const newRecord = payload.new as { id_piatto: string; is_available: boolean; price: number | null };
-            if (newRecord && newRecord.id_piatto) {
-              setState((prev) => ({
-                availability: {
-                  ...prev.availability,
-                  [newRecord.id_piatto]: newRecord.is_available,
-                },
-                prices: newRecord.price !== null && newRecord.price !== undefined
-                  ? { ...prev.prices, [newRecord.id_piatto]: Number(newRecord.price) }
-                  : (() => {
-                      const { [newRecord.id_piatto]: _, ...rest } = prev.prices;
-                      return rest;
-                    })(),
-              }));
-            }
-          }
-        )
-        .subscribe();
-    } catch (e) {
-      console.error('[useMenuAvailability] Realtime subscription failed:', e);
-    }
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      if (channel) {
-        try {
-          client.removeChannel(channel);
-        } catch (e) {
-          console.error('[useMenuAvailability] Failed to remove channel:', e);
-        }
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
   return state;
 }
-

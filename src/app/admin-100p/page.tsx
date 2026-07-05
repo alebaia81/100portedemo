@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { verifyPin, toggleProductAvailability, toggleCategoryAvailability, updateProductPrice } from "./actions";
-import { supabase } from "@/lib/supabase";
 import { MENU_DATA } from "@/lib/menu-data";
 import ScrollToTop from "@/components/ScrollToTop";
+
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -63,21 +63,21 @@ export default function AdminPage() {
   useEffect(() => {
     if (isAuthenticated) {
       const fetchState = async () => {
-        const { data } = await supabase.from('disponibilita_piatti').select('id_piatto, is_available, price');
-        if (data) {
-          const avail: Record<string, boolean> = {};
-          const pr: Record<string, number | null> = {};
-          data.forEach(item => {
-            avail[item.id_piatto] = item.is_available;
-            pr[item.id_piatto] = item.price;
-          });
-          setAvailability(avail);
-          setPrices(pr);
+        try {
+          // Usa l'API route server-side (le env vars funzionano nel Worker Cloudflare)
+          const res = await fetch('/api/availability', { cache: 'no-store' });
+          if (!res.ok) return;
+          const data = await res.json();
+          setAvailability(data.availability ?? {});
+          setPrices(data.prices ?? {});
+        } catch (e) {
+          console.error('[Admin] Failed to fetch state:', e);
         }
       };
       fetchState();
     }
   }, [isAuthenticated]);
+
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
