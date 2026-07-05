@@ -9,26 +9,46 @@ export default function Home() {
       <Header />
       
       {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=2071&auto=format&fit=crop')] bg-cover bg-center">
-          <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px]" />
-        </div>
-        
-        <div className="relative z-10 container mx-auto px-6 text-center">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl mb-6 tracking-tighter text-white">
-            L&apos;Hamburgeria <br />
-            <span className="text-white italic font-serif">Gourmet</span>
-          </h1>
-          <p className="max-w-2xl mx-auto text-lg md:text-xl text-stone-300 mb-10 leading-relaxed">
-            Carni selezionate, birre artigianali e l&apos;atmosfera autentica di un pub che ha fatto la storia locale.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/menu" className="btn-logo-blue text-lg px-10 py-4">
-              Ordina Ora
-            </Link>
-            <a href="#contatti" className="btn-amber-glow text-lg px-10 py-4 text-center">
-              Vieni a trovarci
-            </a>
+      <section className="relative py-16 md:py-24 bg-background overflow-hidden border-b border-border/40">
+        {/* Sfera luminosa decorativa di sfondo */}
+        <div className="absolute inset-0 bg-radial from-accent/5 to-transparent pointer-events-none -z-10" />
+
+        <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Colonna Sinistra: Testi e Pulsanti */}
+          <div className="lg:col-span-6 flex flex-col items-start text-left">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-accent">
+              Hamburgeria Gourmet &amp; Birreria
+            </span>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-foreground font-extrabold tracking-tight mt-4 mb-6 leading-tight">
+              L&apos;Hamburgeria <br />
+              <span className="text-accent italic font-serif">Gourmet</span>
+            </h1>
+            <p className="text-muted-text text-base md:text-lg max-w-xl mb-10 leading-relaxed font-light">
+              Carni selezionate, birre artigianali e l&apos;atmosfera autentica di un pub che ha fatto la storia locale.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              <Link href="/menu" className="btn-logo-blue text-base px-8 py-3.5 text-center">
+                Ordina Ora
+              </Link>
+              <a href="#contatti" className="btn-amber-glow text-base px-8 py-3.5 text-center">
+                Vieni a trovarci
+              </a>
+            </div>
+          </div>
+
+          {/* Colonna Destra: Foto Gourmet Nitida (Ingrandita 50/50 con aspect-ratio 4:3) */}
+          <div className="lg:col-span-6 relative w-full aspect-[4/3] max-w-2xl mx-auto lg:max-w-none">
+            {/* Bagliore dorato soffuso alle spalle del piatto */}
+            <div className="absolute inset-0 bg-accent/15 rounded-3xl blur-3xl -z-10 transform scale-95" />
+            
+            {/* Scheda immagine con bordi arrotondati, ombra morbida e bordo reattivo */}
+            <div className="w-full h-full rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-border/40 relative group hover:border-accent/40 transition-colors duration-500">
+              <img
+                src="https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?q=80&w=800&auto=format&fit=crop"
+                alt="Hamburger Gourmet Burger Lab"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            </div>
           </div>
         </div>
       </section>
